@@ -27,6 +27,7 @@
 *.exe
 *.out
 *.app
+schedule_bot
 
 # CMake Local Files
 CMakeCache.txt
@@ -38,6 +39,7 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+CMakeLists.txt.user
 
 # Token File
 config/token.h
