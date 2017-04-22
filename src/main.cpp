@@ -28,17 +28,14 @@
 
 #include "token.h"
 
-using namespace std;
-using namespace TgBot;
-
 bool sigintGot = false;
 
 int main() {
-    Bot bot(API_TOKEN);
-    bot.getEvents().onCommand("start", [&bot](Message::Ptr message) {
+    TgBot::Bot bot(API_TOKEN);
+    bot.getEvents().onCommand("start", [&bot](TgBot::Message::Ptr message) {
         bot.getApi().sendMessage(message->chat->id, "Hi!");
     });
-    bot.getEvents().onAnyMessage([&bot](Message::Ptr message) {
+    bot.getEvents().onAnyMessage([&bot](TgBot::Message::Ptr message) {
         printf("User wrote %s\n", message->text.c_str());
         if (StringTools::startsWith(message->text, "/start")) {
             return;
@@ -53,12 +50,12 @@ int main() {
     try {
         printf("Bot username: %s\n", bot.getApi().getMe()->username.c_str());
 
-        TgLongPoll longPoll(bot);
+        TgBot::TgLongPoll longPoll(bot);
         while (!sigintGot) {
             printf("Long poll started\n");
             longPoll.start();
         }
-    } catch (exception& e) {
+    } catch (std::exception& e) {
         printf("error: %s\n", e.what());
     }
 
