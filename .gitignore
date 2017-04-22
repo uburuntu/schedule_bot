@@ -40,5 +40,5 @@ compile_commands.json
 CTestTestfile.cmake
 
 # Token File
-token/token.h
+config/token.h
 
