@@ -12,7 +12,13 @@ QMAKE_LIBS += -lTgBot -lboost_system -lboost_iostreams -lssl -lcrypto
 
 INCLUDEPATH *= src config
 
-OBJECTS_DIR = build
+CONFIG(debug, debug|release) {
+    DESTDIR = build.dbg
+} else {
+    DESTDIR = build
+}
+
+    OBJECTS_DIR = $$DESTDIR/obj
 
 # Input
 HEADERS += config/token.h \
