@@ -6,6 +6,11 @@ QT -= gui core
 
 CONFIG += console
 CONFIG -= qml_debug
+CONFIG(release, debug|release) {
+    CONFIG += optimize_full
+}
+QMAKE_LFLAGS_RELEASE += -O3
+QMAKE_LFLAGS_RELEASE -= -Wl,-O1
 
 QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra -W
 QMAKE_LIBS += -lTgBot -lboost_system -lboost_iostreams -lssl -lcrypto
