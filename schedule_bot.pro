@@ -4,6 +4,7 @@ TEMPLATE = app
 
 QT -= gui core
 
+CONFIG += debug_and_release
 CONFIG += console
 CONFIG -= qml_debug
 CONFIG(release, debug|release) {
