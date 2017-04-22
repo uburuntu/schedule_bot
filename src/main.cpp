@@ -26,7 +26,7 @@
 
 #include <tgbot/tgbot.h>
 
-#include "../config/token.h"
+#include "token.h"
 
 using namespace std;
 using namespace TgBot;

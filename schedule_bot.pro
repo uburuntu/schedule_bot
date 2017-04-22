@@ -10,6 +10,8 @@ CONFIG -= qml_debug
 QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra -W
 QMAKE_LIBS += -lTgBot -lboost_system -lboost_iostreams -lssl -lcrypto
 
+INCLUDEPATH *= src config
+
 OBJECTS_DIR = build
 
 # Input
