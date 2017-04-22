@@ -46,7 +46,7 @@ int main() {
         bot.getApi().sendMessage(message->chat->id, "Your message is: " + message->text);
     });
 
-    signal(SIGINT, [](int s) {
+    signal(SIGINT, [](int) {
         printf("SIGINT got");
         sigintGot = true;
     });
