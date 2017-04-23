@@ -28,5 +28,7 @@ CONFIG(debug, debug|release) {
 
 # Input
 HEADERS += config/token.h \
+    src/user.h
 
 SOURCES += src/main.cpp \
+    src/user.cpp
