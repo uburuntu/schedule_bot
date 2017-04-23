@@ -25,7 +25,7 @@
 #include <exception>
 
 #include <tgbot/tgbot.h>
-#include "include/sch_bot.h"
+#include "sch_bot.h"
 #include "token.h"
 
 sig_atomic_t signal_interrrupt_got = false;

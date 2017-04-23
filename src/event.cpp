@@ -1,4 +1,4 @@
-#include "include/event.h"
+#include "event.h"
 
 event_class::event_class(boost::posix_time::ptime date_time_arg, std::string &name_arg, EVENT_TYPE etype_arg)
   : event_date_time (date_time_arg), name (name_arg), etype (etype_arg)
