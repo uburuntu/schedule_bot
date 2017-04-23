@@ -41,6 +41,9 @@ compile_commands.json
 CTestTestfile.cmake
 CMakeLists.txt.user
 
+# Project Files
+*.user
+
 # Token File
 config/token.h
 
