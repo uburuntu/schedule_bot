@@ -28,7 +28,9 @@ OBJECTS_DIR = $$DESTDIR/obj
 
 # Input
 HEADERS += config/token.h \
-    src/user.h
+    src/user.h \
+    src/include/event.h
 
 SOURCES += src/main.cpp \
-    src/user.cpp
+    src/user.cpp \
+    src/event.cpp

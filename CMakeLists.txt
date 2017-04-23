@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -W -Wall -Wunused -Wcast-alig
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
 
 # Source files list
-set(SOURCES_LIST src/main.cpp)
+set(SOURCES_LIST src/main.cpp src/event.cpp)
 
 # Headers directories list
 set(HEADERS_DIRS_LIST ./src ./config)
