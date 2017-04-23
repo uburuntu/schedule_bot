@@ -43,7 +43,7 @@ void sch_bot::init_commands ()
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    printf ("[LOW] User %s wrote %s\n\n", message_in->chat->username.c_str (), message_in->text.c_str());
+    printf ("[LOW] User %s wrote %s\n", message_in->chat->username.c_str (), message_in->text.c_str());
 
     if (StringTools::startsWith (message_in->text, "/"))
       {
