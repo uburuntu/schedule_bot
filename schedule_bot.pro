@@ -13,7 +13,9 @@ CONFIG(release, debug|release) {
 QMAKE_LFLAGS_RELEASE += -Ofast
 QMAKE_LFLAGS_RELEASE -= -Wl,-O1
 
-QMAKE_CXXFLAGS += -std=c++1y -W -Wall -Wunused -Wcast-align -pedantic -fstack-protector-all -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wcast-align -Wno-format -Wno-long-long -Wmissing-declarations
+QMAKE_CXXFLAGS += -std=c++1y -W -Wall -Wunused -Wcast-align -pedantic -fstack-protector-all \
+                  -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wcast-align -Wno-format \
+                  -Wno-long-long -Wmissing-declarations
 QMAKE_LIBS += -lTgBot -lboost_system -lboost_iostreams -lssl -lcrypto
 
 INCLUDEPATH *= src config
@@ -28,7 +30,7 @@ OBJECTS_DIR = $$DESTDIR/obj
 
 # Input
 HEADERS += config/token.h \
-    src/user.h \
+    src/include/user.h \
     src/include/event.h
 
 SOURCES += src/main.cpp \
