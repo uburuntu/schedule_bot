@@ -36,7 +36,8 @@ HEADERS += \
     src/include/user.h \
     src/include/event.h \
     src/include/sch_bot.h \
-    src/include/utils.h
+    src/include/utils.h \
+    src/include/defaults.h
 
 SOURCES += src/main.cpp \
     src/user.cpp \
