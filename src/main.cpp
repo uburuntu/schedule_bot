@@ -25,7 +25,7 @@
 #include <exception>
 
 #include <tgbot/tgbot.h>
-#include "sch_bot.h"
+#include "include/sch_bot.h"
 #include "token.h"
 
 static bool sigintGot = false;
