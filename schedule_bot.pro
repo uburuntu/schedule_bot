@@ -20,7 +20,7 @@ QMAKE_LIBS += -lTgBot -lssl -lcrypto
 LIBS += -L/usr/local/lib -lboost_system -lboost_iostreams -lboost_date_time
 PRE_TARGETDEPS += /usr/local/lib/libboost_system.a /usr/local/lib/libboost_iostreams.a /usr/local/lib/libboost_date_time.a
 
-INCLUDEPATH *= src config
+INCLUDEPATH *= src src/include config
 
 CONFIG(debug, debug|release) {
     DESTDIR = build.dbg
