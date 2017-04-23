@@ -32,13 +32,16 @@ void sch_bot::init_commands ()
     abort ();
   };
 
+  auto unknown_command_handle = [this] (TgBot::Message::Ptr message_in)
+  {
+    send_message (message_in, "Дедушка не понимает тебя");
+  };
+
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
     printf ("User %s wrote %s\n\n", message_in->chat->username.c_str (), message_in->text.c_str());
 
-    if (StringTools::startsWith (message_in->text, "/start")
-        || StringTools::startsWith (message_in->text, "/help")
-        || StringTools::startsWith (message_in->text, "/debug"))
+    if (StringTools::startsWith (message_in->text, "/"))
       {
         return;
       }
@@ -50,6 +53,7 @@ void sch_bot::init_commands ()
   getEvents ().onCommand ("help", help_handle);
   getEvents ().onCommand ("debug", debug_handle);
   getEvents ().onCommand ("kill", kill_handle);
+  getEvents ().onUnknownCommand (unknown_command_handle);
 
   getEvents ().onAnyMessage (any_message_handle);
 }
