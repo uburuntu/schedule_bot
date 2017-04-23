@@ -2,8 +2,8 @@
 #include <tgbot/EventBroadcaster.h>
 #include <tgbot/types/Message.h>
 
-#include "include/sch_bot.h"
-#include "include/utils.h"
+#include "sch_bot.h"
+#include "utils.h"
 
 void sch_bot::init_commands ()
 {
@@ -22,8 +22,8 @@ void sch_bot::init_commands ()
 
   auto debug_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    fix_unused (message_in);
-    do_nothing ();
+    switch_bool (debug_mode);
+    send_message (message_in, "Debug mode enabled. You will be notified about some serious shit.");
   };
 
   auto kill_handle = [this] (TgBot::Message::Ptr message_in)

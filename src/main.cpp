@@ -28,7 +28,7 @@
 #include "include/sch_bot.h"
 #include "token.h"
 
-static bool sigintGot = false;
+sig_atomic_t signal_interrrupt_got = false;
 
 int main ()
 {
@@ -36,7 +36,7 @@ int main ()
 
   bot.init_commands ();
 
-  signal (SIGINT, [] (int) { printf ("SIGINT got, aborting...\n"); sigintGot = true;});
+  signal (SIGINT, [] (int) { printf ("SIGINT got, aborting...\n"); signal_interrrupt_got = true;});
 
   try
     {
@@ -44,7 +44,7 @@ int main ()
 
       TgBot::TgLongPoll longPoll (bot);
 
-      while (!sigintGot)
+      while (!signal_interrrupt_got)
         {
           printf ("Long poll started\n");
           longPoll.start();

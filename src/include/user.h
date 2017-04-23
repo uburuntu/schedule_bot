@@ -1,11 +1,10 @@
 #ifndef USER_H
 #define USER_H
 
-
 class user
 {
 public:
-    user();
+    user ();
 };
 
 #endif // USER_H

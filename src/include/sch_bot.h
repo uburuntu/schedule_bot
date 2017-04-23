@@ -18,6 +18,6 @@ class sch_bot : public TgBot::Bot
     void send_message (TgBot::Message::Ptr message, const std::string &text);
     // Send message to specific id
     void send_message (chat_id id, const std::string &text);
-  };
+};
 
 #endif // SCH_BOT_H
