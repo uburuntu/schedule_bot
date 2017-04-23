@@ -36,3 +36,6 @@ HEADERS += config/token.h \
 SOURCES += src/main.cpp \
     src/user.cpp \
     src/event.cpp
+
+DISTFILES += \
+    config/code_style.astylerc
