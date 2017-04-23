@@ -28,31 +28,36 @@
 #include "sch_bot.h"
 #include "token.h"
 
-sig_atomic_t signal_interrrupt_got = false;
+volatile sig_atomic_t signal_got = 0;
 
-int main ()
+int main (int /* argc */, char *argv[])
 {
-  sch_bot bot (API_TOKEN);
+  // Signal handler
+  signal (SIGINT, [] (int s) { printf ("[HIGH] Program got SIGINT signal, aborting...\n"); signal_got = s;});
 
+  // Create and initialize bot
+  sch_bot bot (API_TOKEN);
   bot.init_commands ();
 
-  signal (SIGINT, [] (int) { printf ("SIGINT got, aborting...\n"); signal_interrrupt_got = true;});
+  // Log info
+  printf ("[INFO] The program '%s' started work\n", argv[0]);
+  printf ("[INFO] Bot id: %d\n", bot.getApi ().getMe ()->id);
+  printf ("[INFO] Bot username: %s\n", bot.getApi ().getMe ()->username.c_str ());
 
+  // Run loop to handle messages
   try
     {
-      printf ("Bot username: %s\n", bot.getApi().getMe()->username.c_str());
+      TgBot::TgLongPoll long_poll (bot);
 
-      TgBot::TgLongPoll longPoll (bot);
-
-      while (!signal_interrrupt_got)
+      printf ("[LOW] Long poll started\n");
+      while (!signal_got)
         {
-          printf ("Long poll started\n");
-          longPoll.start();
+          long_poll.start ();
         }
     }
   catch (std::exception &e)
     {
-      printf ("error: %s\n", e.what());
+      printf ("[HIGH] Error: %s\n", e.what ());
     }
 
   return 0;
