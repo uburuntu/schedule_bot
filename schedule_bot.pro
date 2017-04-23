@@ -31,11 +31,13 @@ OBJECTS_DIR = $$DESTDIR/obj
 # Input
 HEADERS += config/token.h \
     src/include/user.h \
-    src/include/event.h
+    src/include/event.h \
+    src/sch_bot.h
 
 SOURCES += src/main.cpp \
     src/user.cpp \
-    src/event.cpp
+    src/event.cpp \
+    src/sch_bot.cpp
 
 DISTFILES += \
     config/code_style.astylerc
