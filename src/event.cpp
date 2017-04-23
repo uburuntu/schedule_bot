@@ -71,6 +71,40 @@ void event_class::remove_notify (boost::posix_time::ptime notify_to_remove)
       }
 }
 
+int event_class::add_user_note (std::string &added_user_note)
+{
+  if (added_user_note.size () + user_note.size () > MAX_USER_NOTE_SIZE)
+    return -1;
+  std::string t (" ");
+  user_note += t + added_user_note;
+  return 0;
+}
+
+int event_class::add_default_note (std::string &added_default_note)
+{
+  if (added_default_note.size () + default_note.size () > MAX_DEFAULT_NOTE_SIZE)
+    return -1;
+  std::string t (" ");
+  default_note += t + added_default_note;
+  return 0;
+}
+
+int event_class::rewrite_user_note (std::string &new_user_note)
+{
+  if (new_user_note.size () > MAX_USER_NOTE_SIZE)
+    return -1;
+  user_note = std::move (new_user_note);
+  return 0;
+}
+
+int event_class::rewrite_default_note (std::string &new_default_note)
+{
+  if (new_default_note.size () > MAX_DEFAULT_NOTE_SIZE)
+    return -1;
+  default_note = std::move (new_default_note);
+  return 0;
+}
+
 bool event_class::is_empty () // maybe not neccecary
 {
   return event_date_time == boost::posix_time::not_a_date_time && notify_vector.empty () && place.empty () &&

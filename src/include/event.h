@@ -3,8 +3,11 @@
 
 #include <string>
 #include <vector>
-#include "boost/date_time/posix_time/posix_time_types.hpp"
-#include "boost/date_time/gregorian/gregorian_types.hpp"
+#include "boost/date_time/posix_time/posix_time.hpp"
+#include "boost/date_time/gregorian/gregorian.hpp"
+
+#define MAX_USER_NOTE_SIZE 256
+#define MAX_DEFAULT_NOTE_SIZE 512
 
 enum EVENT_TYPE
 {
@@ -35,12 +38,15 @@ class event_class
 
     // setters
     void change_type (EVENT_TYPE new_etype) {etype = new_etype;}
-    void set_place (std::string new_place) {place = new_place;} // maybe better use std::move
+    void set_place (std::string &new_place) {place = std::move (new_place);}
 
     // other
     int add_user_note (std::string &added_user_note);
-    int change_user_note (std::string &added_user_note);
+    int add_default_note (std::string &added_default_note);
+    int rewrite_user_note (std::string &new_user_note);
+    int rewrite_default_note (std::string &new_default_note);
     void clear_user_note () {user_note.clear ();}
+    void clear_default_note () {default_note.clear ();}
     void add_notify (boost::posix_time::ptime new_notify);
     void remove_notify (boost::posix_time::ptime notify_to_remove);
     void clear_notify () {notify_vector.clear ();}
