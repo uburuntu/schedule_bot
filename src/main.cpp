@@ -34,22 +34,7 @@ int main ()
 {
   sch_bot bot (API_TOKEN);
 
-  bot.getEvents().onCommand ("start", [&bot] (TgBot::Message::Ptr message)
-  {
-    bot.getApi().sendMessage (message->chat->id, "Hi!");
-  });
-
-  bot.getEvents().onAnyMessage ([&bot] (TgBot::Message::Ptr message)
-  {
-    printf ("User wrote %s\n", message->text.c_str());
-
-    if (StringTools::startsWith (message->text, "/start"))
-      {
-        return;
-      }
-
-    bot.getApi().sendMessage (message->chat->id, "Your message is: " + message->text);
-  });
+  bot.init_commands ();
 
   signal (SIGINT, [] (int) { printf ("SIGINT got, aborting...\n"); sigintGot = true;});
 

@@ -34,7 +34,8 @@ OBJECTS_DIR = $$DESTDIR/obj
 HEADERS += config/token.h \
     src/include/user.h \
     src/include/event.h \
-    src/sch_bot.h
+    src/include/sch_bot.h \
+    src/include/utils.h
 
 SOURCES += src/main.cpp \
     src/user.cpp \
