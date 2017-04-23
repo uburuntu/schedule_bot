@@ -16,7 +16,9 @@ QMAKE_LFLAGS_RELEASE -= -Wl,-O1
 QMAKE_CXXFLAGS += -std=c++1y -W -Wall -Wunused -Wcast-align -pedantic -fstack-protector-all \
                   -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wcast-align -Wno-format \
                   -Wno-long-long -Wmissing-declarations
-QMAKE_LIBS += -lTgBot -lboost_system -lboost_iostreams -lssl -lcrypto
+QMAKE_LIBS += -lTgBot -lssl -lcrypto
+LIBS += -L/usr/local/lib -lboost_system -lboost_iostreams
+PRE_TARGETDEPS += /usr/local/lib/libboost_system.a /usr/local/lib/libboost_iostreams.a
 
 INCLUDEPATH *= src config
 
