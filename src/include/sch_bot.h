@@ -15,9 +15,9 @@ class sch_bot : public TgBot::Bot
 
   private:
     // Send answer to input message
-    void send_message (TgBot::Message::Ptr message, const std::string &text);
+    void send_message (const TgBot::Message::Ptr message, const std::string &text) const;
     // Send message to specific id
-    void send_message (chat_id id, const std::string &text);
+    void send_message (user_id id, const std::string &text) const;
 };
 
 #endif // SCH_BOT_H

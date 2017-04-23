@@ -58,12 +58,12 @@ void sch_bot::init_commands ()
   getEvents ().onAnyMessage (any_message_handle);
 }
 
-void sch_bot::send_message (TgBot::Message::Ptr message, const std::string &text)
+void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string &text) const
 {
   getApi ().sendMessage (message->chat->id, text);
 }
 
-void sch_bot::send_message (chat_id id, const std::string &text)
+void sch_bot::send_message (user_id id, const std::string &text) const
 {
   getApi ().sendMessage (id, text);
 }
