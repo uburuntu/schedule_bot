@@ -31,7 +31,8 @@ CONFIG(debug, debug|release) {
 OBJECTS_DIR = $$DESTDIR/obj
 
 # Input
-HEADERS += config/token.h \
+HEADERS += \
+    config/token.h \ # Use 'git update-index --assume-unchanged config/token.h' to untrack changes from token.h
     src/include/user.h \
     src/include/event.h \
     src/include/sch_bot.h \
