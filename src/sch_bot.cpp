@@ -2,7 +2,7 @@
 #include <tgbot/EventBroadcaster.h>
 #include <tgbot/types/Message.h>
 
-#include "sch_bot.h"
+#include "include/sch_bot.h"
 #include "include/utils.h"
 
 void sch_bot::init_commands ()
