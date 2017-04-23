@@ -9,6 +9,10 @@ void sch_bot::init_commands ()
 {
   auto start_handle = [this] (TgBot::Message::Ptr message_in)
   {
+    user_id id = message_in->chat->id;
+    if (!user_exist (id))
+      users.emplace (id, id);
+
     send_message (message_in, "Приветик, красавчик! Ты попал к лучшему боту в Телеграме.\n\nВызови /help для помощи.");
   };
 
@@ -22,7 +26,7 @@ void sch_bot::init_commands ()
 
   auto debug_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    switch_bool (debug_mode);
+    switch_bool (users[message_in->chat->id].debug_mode);
     send_message (message_in, "Debug mode enabled. You will be notified about some serious shit.");
   };
 
@@ -49,13 +53,13 @@ void sch_bot::init_commands ()
     send_message (message_in, "Your message is: " + message_in->text);
   };
 
+  getEvents ().onAnyMessage (any_message_handle);
+
   getEvents ().onCommand ("start", start_handle);
   getEvents ().onCommand ("help", help_handle);
   getEvents ().onCommand ("debug", debug_handle);
   getEvents ().onCommand ("kill", kill_handle);
   getEvents ().onUnknownCommand (unknown_command_handle);
-
-  getEvents ().onAnyMessage (any_message_handle);
 }
 
 void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string &text) const

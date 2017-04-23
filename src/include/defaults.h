@@ -1,6 +1,8 @@
 #ifndef DEFAULTS_H
 #define DEFAULTS_H
 
-static bool debug_mode = false;
+#include <stdint.h>
+
+typedef int64_t user_id;
 
 #endif // DEFAULTS_H

@@ -3,15 +3,23 @@
 
 #include <tgbot/Bot.h>
 
+#include "user.h"
+#include "defaults.h"
+
 class sch_bot : public TgBot::Bot
 {
-  using chat_id = int64_t;
-
   public:
     explicit sch_bot (const std::string &token) : TgBot::Bot (token)
       {}
 
     void init_commands ();
+
+    std::map<user_id, user> users;
+
+    bool user_exist (user_id id) const
+      {
+        return users.find (id) != users.end ();
+      }
 
   private:
     // Send answer to input message
