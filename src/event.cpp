@@ -18,23 +18,23 @@ event_class::~event_class ()
 event_class::event_class (const event_class &rhs)
 {
   event_date_time = rhs.event_date_time;
-  name = rhs.name; // Not sure, check later if copy pointer or meanings
+  name = rhs.name;
   etype = rhs.etype;
-  notify_vector = rhs.notify_vector; // Not sure, check later if copy pointer or meanings
-  place = rhs.place; // Not sure, check later if copy pointer or meanings
-  default_note = rhs.default_note; // Not sure, check later if copy pointer or meanings
-  user_note = rhs.user_note; // Not sure, check later if copy pointer or meanings
+  notify_vector = rhs.notify_vector;
+  place = rhs.place;
+  default_note = rhs.default_note;
+  user_note = rhs.user_note;
 }
 //should be copying everywhere
 event_class &event_class::operator= (const event_class &rhs)
 {
   event_date_time = rhs.event_date_time;
-  name = rhs.name; // Not sure, check later if copy pointer or meanings
+  name = rhs.name;
   etype = rhs.etype;
-  notify_vector = rhs.notify_vector; // Not sure, check later if copy pointer or meanings
-  place = rhs.place; // Not sure, check later if copy pointer or meanings
-  default_note = rhs.default_note; // Not sure, check later if copy pointer or meanings
-  user_note = rhs.user_note; // Not sure, check later if copy pointer or meanings
+  notify_vector = rhs.notify_vector;
+  place = rhs.place;
+  default_note = rhs.default_note;
+  user_note = rhs.user_note;
   return *this;
 }
 
