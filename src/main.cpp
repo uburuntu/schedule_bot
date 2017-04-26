@@ -37,6 +37,7 @@ int main (int /* argc */, char *argv[])
 
   // Create and initialize bot
   sch_bot bot (API_TOKEN);
+  bot.init_users ();
   bot.init_commands ();
 
   // Log info

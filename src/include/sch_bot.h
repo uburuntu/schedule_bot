@@ -14,6 +14,8 @@ class sch_bot : public TgBot::Bot
 
     void init_commands ();
 
+    void init_users ();
+
     std::map<user_id, user> users;
 
     bool user_exist (user_id id) const
@@ -26,6 +28,8 @@ class sch_bot : public TgBot::Bot
     void send_message (const TgBot::Message::Ptr message, const std::string &text) const;
     // Send message to specific id
     void send_message (user_id id, const std::string &text) const;
+    // Send message to all users
+    void send_message_all (const std::string &text) const;
 };
 
 #endif // SCH_BOT_H

@@ -43,7 +43,7 @@ void sch_bot::init_commands ()
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    printf ("[LOW] User %s wrote %s\n", message_in->chat->username.c_str (), message_in->text.c_str());
+    printf ("[LOW] User (name = %s, id = %d) wrote '%s'\n", message_in->chat->username.c_str (), message_in->chat->id, message_in->text.c_str());
 
     if (StringTools::startsWith (message_in->text, "/"))
       {
@@ -54,12 +54,27 @@ void sch_bot::init_commands ()
   };
 
   getEvents ().onAnyMessage (any_message_handle);
+  getEvents ().onUnknownCommand (unknown_command_handle);
 
   getEvents ().onCommand ("start", start_handle);
   getEvents ().onCommand ("help", help_handle);
   getEvents ().onCommand ("debug", debug_handle);
   getEvents ().onCommand ("kill", kill_handle);
-  getEvents ().onUnknownCommand (unknown_command_handle);
+}
+
+void sch_bot::init_users ()
+{
+  user_id admin_r = 28006241;
+  user_id admin_a = 3191519;
+  user_id admin_v = 173546332;
+
+  users.emplace (admin_r, admin_r);
+  users.emplace (admin_a, admin_a);
+  users.emplace (admin_v, admin_v);
+
+  send_message_all ("[Admin Report] Bot started, current version: " + sbot::version);
+
+  // TODO: implement users import / export
 }
 
 void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string &text) const
@@ -70,4 +85,12 @@ void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string
 void sch_bot::send_message (user_id id, const std::string &text) const
 {
   getApi ().sendMessage (id, text);
+}
+
+void sch_bot::send_message_all (const std::string &text) const
+{
+  for (auto &user_it : users)
+    {
+      send_message (user_it.second.get_id (), text);
+    }
 }
