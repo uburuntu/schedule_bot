@@ -1,3 +1,5 @@
+#include <signal.h>
+
 #include <tgbot/Api.h>
 #include <tgbot/EventBroadcaster.h>
 #include <tgbot/types/Message.h>
@@ -10,8 +12,7 @@ void sch_bot::init_commands ()
   auto start_handle = [this] (TgBot::Message::Ptr message_in)
   {
     user_id id = message_in->chat->id;
-    if (!user_exist (id))
-      users.emplace (id, id);
+    add_user (id);
 
     send_message (message_in, "Приветик, красавчик! Ты попал к лучшему боту в Телеграме.\n\nВызови /help для помощи.");
   };
@@ -26,14 +27,25 @@ void sch_bot::init_commands ()
 
   auto debug_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    switch_bool (users[message_in->chat->id].debug_mode);
+    if (!is_admin (message_in->chat->id))
+      return;
+
+    users[message_in->chat->id].switch_debug ();
     send_message (message_in, "Debug mode enabled. You will be notified about some serious shit.");
   };
 
   auto kill_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    send_message (message_in, "You killed me :(\nRestart server now.");
-    abort ();
+    if (!is_admin (message_in->chat->id))
+      return;
+
+    send_message_admins (message_in->chat->username + " killed me :(\n\nRestart server now.");
+    raise (SIGINT);
+  };
+
+  auto all_handle = [this] (TgBot::Message::Ptr message_in)
+  {
+    send_message_all ("[Global Message] " + message_in->chat->username + ":\n\n" + message_in->text);
   };
 
   auto unknown_command_handle = [this] (TgBot::Message::Ptr message_in)
@@ -60,21 +72,43 @@ void sch_bot::init_commands ()
   getEvents ().onCommand ("help", help_handle);
   getEvents ().onCommand ("debug", debug_handle);
   getEvents ().onCommand ("kill", kill_handle);
+  getEvents ().onCommand ("all", all_handle);
 }
 
 void sch_bot::init_users ()
 {
-  user_id admin_r = 28006241;
-  user_id admin_a = 3191519;
-  user_id admin_v = 173546332;
+  // Developer's id as admins
+  add_admin (sbot::r_id);
+  add_admin (sbot::a_id);
+  add_admin (sbot::v_id);
 
-  users.emplace (admin_r, admin_r);
-  users.emplace (admin_a, admin_a);
-  users.emplace (admin_v, admin_v);
-
-  send_message_all ("[Admin Report] Bot started, current version: " + sbot::version);
+  send_message_admins ("[Admin Report] Bot started, current version: " + sbot::version);
 
   // TODO: implement users import / export
+}
+
+void sch_bot::add_user (user_id id)
+{
+  if (!user_exist (id))
+    {
+      users.emplace (id, id);
+    }
+}
+
+void sch_bot::add_admin (user_id id)
+{
+  add_user (id);
+  admins.insert (id);
+}
+
+bool sch_bot::user_exist (user_id id) const
+{
+  return users.find (id) != users.end ();
+}
+
+bool sch_bot::is_admin (user_id id) const
+{
+  return admins.find (id) != admins.end ();
 }
 
 void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string &text) const
@@ -92,5 +126,13 @@ void sch_bot::send_message_all (const std::string &text) const
   for (auto &user_it : users)
     {
       send_message (user_it.second.get_id (), text);
+    }
+}
+
+void sch_bot::send_message_admins (const std::string &text) const
+{
+  for (auto &user_it : admins)
+    {
+      send_message (user_it, text);
     }
 }

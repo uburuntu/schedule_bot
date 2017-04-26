@@ -2,6 +2,7 @@
 #define USER_H
 
 #include "defaults.h"
+#include "utils.h"
 
 class user
 {
@@ -16,9 +17,10 @@ public:
         return id;
       }
 
-    bool debug_mode = false;
+    void switch_debug () { switch_bool (debug_mode);}
 
 private:
+    bool debug_mode = false;
     user_id id = 0;
 };
 
