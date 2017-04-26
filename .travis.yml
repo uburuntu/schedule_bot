@@ -1,0 +1,32 @@
+sudo: required
+
+os: linux
+
+language: cpp
+
+compiler:
+  - gcc
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
+
+before_install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+  - sudo ./install_dependencies.sh
+
+script:
+  - ./build.sh
+
+notifications:
+  email:
+    recipients:
+      - bekbulatov.ramzan@ya.ru
+      - vrybak17@gmail.com
+      - rogachev.a.v@ya.ru
+    on_success: change
+    on_failure: always
