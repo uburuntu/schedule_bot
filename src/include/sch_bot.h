@@ -31,6 +31,8 @@ class sch_bot : public TgBot::Bot
     void send_message (user_id id, const std::string &text) const;
     // Send message to all users
     void send_message_all (const std::string &text) const;
+    // Send message to all users except one
+    void send_message_all (user_id id, const std::string &text) const;
     // Send message to all admins
     void send_message_admins (const std::string &text) const;
 };

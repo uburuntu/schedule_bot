@@ -14,73 +14,25 @@ void sch_bot::init_commands ()
     user_id id = message_in->chat->id;
     add_user (id);
 
-    send_message (message_in, "Приветик, красавчик! Ты попал к лучшему боту в Телеграме.\n\nВызови /help для помощи.");
-  };
-
-  auto help_handle = [this] (TgBot::Message::Ptr message_in)
-  {
-    std::string help_answer = std::string ("Этот бот предназначен для оповещения о парах, об их аудиториях или других событий в вашей жизни, которые нельзя пропустить.\n\n") +
-                              std::string ("Бот находится в стадии активной разработки, о найденных багах пишите: @rm_bk, @Aenglsmith или @crazyvaskya.");
-
-    send_message (message_in, help_answer);
-  };
-
-  auto debug_handle = [this] (TgBot::Message::Ptr message_in)
-  {
-    if (!is_admin (message_in->chat->id))
-      return;
-
-    users[message_in->chat->id].switch_debug ();
-    send_message (message_in, "Debug mode enabled. You will be notified about some serious shit.");
-  };
-
-  auto kill_handle = [this] (TgBot::Message::Ptr message_in)
-  {
-    if (!is_admin (message_in->chat->id))
-      return;
-
-    send_message_admins (message_in->chat->username + " killed me :(\n\nRestart server now.");
-    raise (SIGINT);
-  };
-
-  auto all_handle = [this] (TgBot::Message::Ptr message_in)
-  {
-    send_message_all ("[Global Message] " + message_in->chat->username + ":\n\n" + message_in->text);
-  };
-
-  auto unknown_command_handle = [this] (TgBot::Message::Ptr message_in)
-  {
-    send_message (message_in, "Дедушка не понимает тебя");
+    printf ("[HIGH] New user: %d\n", id);
+    send_message (message_in, "Приветик, красавчик! Ты попал к лучшему боту в Телеграме.\n\nКаждое твоё сообщение анонимно попадает к каждому, кто зашел в бота.");
   };
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
     printf ("[LOW] User (name = %s, id = %d) wrote '%s'\n", message_in->chat->username.c_str (), message_in->chat->id, message_in->text.c_str());
 
-    if (StringTools::startsWith (message_in->text, "/"))
-      {
-        return;
-      }
-
-    send_message (message_in, "Your message is: " + message_in->text);
+    send_message_all (message_in->chat->id, message_in->text);
   };
 
   getEvents ().onAnyMessage (any_message_handle);
-  getEvents ().onUnknownCommand (unknown_command_handle);
-
   getEvents ().onCommand ("start", start_handle);
-  getEvents ().onCommand ("help", help_handle);
-  getEvents ().onCommand ("debug", debug_handle);
-  getEvents ().onCommand ("kill", kill_handle);
-  getEvents ().onCommand ("all", all_handle);
 }
 
 void sch_bot::init_users ()
 {
   // Developer's id as admins
   add_admin (sbot::r_id);
-  add_admin (sbot::a_id);
-  add_admin (sbot::v_id);
 
   send_message_admins ("[Admin Report] Bot started, current version: " + sbot::version);
 
@@ -125,6 +77,17 @@ void sch_bot::send_message_all (const std::string &text) const
 {
   for (auto &user_it : users)
     {
+      send_message (user_it.second.get_id (), text);
+    }
+}
+
+void sch_bot::send_message_all (user_id id, const std::string &text) const
+{
+  for (auto &user_it : users)
+    {
+      if (user_it.second.get_id () == id)
+        continue;
+
       send_message (user_it.second.get_id (), text);
     }
 }
