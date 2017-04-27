@@ -14,13 +14,18 @@ void sch_bot::init_commands ()
     user_id id = message_in->chat->id;
     add_user (id);
 
-    send_message (message_in, "Приветик, красавчик! Ты попал к лучшему боту в Телеграме.\n\nВызови /help для помощи.");
+    std::string start_answer = "Привет, красавчик! Ты попал к лучшему боту в Телеграме."
+                             + sbot::empty_line
+                             + "Вызови /help для помощи.";
+
+    send_message (message_in, start_answer);
   };
 
   auto help_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    std::string help_answer = std::string ("Этот бот предназначен для оповещения о парах, об их аудиториях или других событий в вашей жизни, которые нельзя пропустить.\n\n") +
-                              std::string ("Бот находится в стадии активной разработки, о найденных багах пишите: @rm_bk, @Aenglsmith или @crazyvaskya.");
+    std::string help_answer = "Этот бот предназначен для оповещения о парах, об их аудиториях или других событий в вашей жизни, которые нельзя пропустить."
+                            + sbot::empty_line
+                            + "Бот находится в стадии активной разработки, о найденных багах пишите: @rm_bk, @Aenglsmith или @crazyvaskya.";
 
     send_message (message_in, help_answer);
   };
@@ -45,7 +50,7 @@ void sch_bot::init_commands ()
 
   auto all_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    send_message_all ("[Global Message] " + message_in->chat->username + ":\n\n" + message_in->text);
+    send_message_all (message_in->chat->username + ":\n" + message_in->text);
   };
 
   auto unknown_command_handle = [this] (TgBot::Message::Ptr message_in)
@@ -55,7 +60,7 @@ void sch_bot::init_commands ()
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    printf ("[LOW] User (name = %s, id = %d) wrote '%s'\n", message_in->chat->username.c_str (), message_in->chat->id, message_in->text.c_str());
+    printf ("[LOW] User (name = %s, id = %ld) wrote '%s'\n", message_in->chat->username.c_str (), message_in->chat->id, message_in->text.c_str());
 
     if (StringTools::startsWith (message_in->text, "/"))
       {
@@ -82,7 +87,7 @@ void sch_bot::init_users ()
   add_admin (sbot::a_id);
   add_admin (sbot::v_id);
 
-  send_message_admins ("[Admin Report] Bot started, current version: " + sbot::version);
+  send_message_admins ("Bot started, current version: " + sbot::version);
 
   // TODO: implement users import / export
 }
@@ -125,7 +130,8 @@ void sch_bot::send_message_all (const std::string &text) const
 {
   for (auto &user_it : users)
     {
-      send_message (user_it.second.get_id (), text);
+      user_id id = user_it.second.get_id ();
+      send_message (id, "[Global Message]" + sbot::empty_line + text);
     }
 }
 
@@ -133,6 +139,9 @@ void sch_bot::send_message_admins (const std::string &text) const
 {
   for (auto &user_it : admins)
     {
-      send_message (user_it, text);
+      user_id id = user_it;
+      send_message (id, "[Admin Report]" + sbot::empty_line + text);
+    }
+}
     }
 }

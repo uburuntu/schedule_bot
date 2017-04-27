@@ -9,7 +9,9 @@ typedef int64_t user_id;
 namespace sbot
 {
   static const std::string program = "Schedule Bot";
-  static const std::string version = "0.0.2";
+  static const std::string version = "0.0.3";
+
+  static const std::string empty_line = "\n\n";
 
   static const user_id r_id = 28006241;
   static const user_id a_id = 3191519;
