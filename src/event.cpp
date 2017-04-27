@@ -1,12 +1,12 @@
 #include "event.h"
 
-event_class::event_class(boost::posix_time::ptime date_time_arg, std::string &name_arg, EVENT_TYPE etype_arg)
+event_t::event_t(boost::posix_time::ptime date_time_arg, std::string &name_arg, event_type etype_arg)
   : event_date_time (date_time_arg), name (name_arg), etype (etype_arg)
 {
 
 }
 
-event_class::~event_class ()
+event_t::~event_t ()
 {
   event_date_time = boost::posix_time::not_a_date_time;
   name.clear ();
@@ -14,8 +14,9 @@ event_class::~event_class ()
   default_note.clear ();
   user_note.clear ();
 }
+
 //should be copying everywhere
-event_class::event_class (const event_class &rhs)
+event_t::event_t (const event_t &rhs)
 {
   event_date_time = rhs.event_date_time;
   name = rhs.name;
@@ -25,8 +26,9 @@ event_class::event_class (const event_class &rhs)
   default_note = rhs.default_note;
   user_note = rhs.user_note;
 }
+
 //should be copying everywhere
-event_class &event_class::operator= (const event_class &rhs)
+event_t &event_t::operator= (const event_t &rhs)
 {
   event_date_time = rhs.event_date_time;
   name = rhs.name;
@@ -38,12 +40,12 @@ event_class &event_class::operator= (const event_class &rhs)
   return *this;
 }
 
-const boost::gregorian::date::day_of_week_type event_class::get_weekday () const
+const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
 {
   return event_date_time.date ().day_of_week ();
 }
 
-void event_class::add_notify (boost::posix_time::ptime new_notify)
+void event_t::add_notify (boost::posix_time::ptime new_notify)
 {
   if (!notify_vector.empty ())
     {
@@ -61,7 +63,7 @@ void event_class::add_notify (boost::posix_time::ptime new_notify)
   notify_vector.push_back (new_notify);
 }
 
-void event_class::remove_notify (boost::posix_time::ptime notify_to_remove)
+void event_t::remove_notify (boost::posix_time::ptime notify_to_remove)
 {
   for (auto i = notify_vector.begin (); i != notify_vector.end (); i++)
     if (*i == notify_to_remove)
@@ -71,7 +73,7 @@ void event_class::remove_notify (boost::posix_time::ptime notify_to_remove)
       }
 }
 
-int event_class::add_user_note (std::string &added_user_note)
+int event_t::add_user_note (std::string &added_user_note)
 {
   if (added_user_note.size () + user_note.size () > MAX_USER_NOTE_SIZE)
     return -1;
@@ -80,7 +82,7 @@ int event_class::add_user_note (std::string &added_user_note)
   return 0;
 }
 
-int event_class::add_default_note (std::string &added_default_note)
+int event_t::add_default_note (std::string &added_default_note)
 {
   if (added_default_note.size () + default_note.size () > MAX_DEFAULT_NOTE_SIZE)
     return -1;
@@ -89,7 +91,7 @@ int event_class::add_default_note (std::string &added_default_note)
   return 0;
 }
 
-int event_class::rewrite_user_note (std::string &new_user_note)
+int event_t::rewrite_user_note (std::string &new_user_note)
 {
   if (new_user_note.size () > MAX_USER_NOTE_SIZE)
     return -1;
@@ -97,7 +99,7 @@ int event_class::rewrite_user_note (std::string &new_user_note)
   return 0;
 }
 
-int event_class::rewrite_default_note (std::string &new_default_note)
+int event_t::rewrite_default_note (std::string &new_default_note)
 {
   if (new_default_note.size () > MAX_DEFAULT_NOTE_SIZE)
     return -1;
@@ -105,8 +107,12 @@ int event_class::rewrite_default_note (std::string &new_default_note)
   return 0;
 }
 
-bool event_class::is_empty () // maybe not neccecary
+bool event_t::is_empty () // maybe not neccecary
 {
-  return event_date_time == boost::posix_time::not_a_date_time && notify_vector.empty () && place.empty () &&
-         name.empty () && user_note.empty () && default_note.empty ();
+  return event_date_time == boost::posix_time::not_a_date_time
+      && notify_vector.empty ()
+      && place.empty ()
+      && name.empty ()
+      && user_note.empty ()
+      && default_note.empty ();
 }

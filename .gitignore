@@ -42,7 +42,7 @@ CTestTestfile.cmake
 CMakeLists.txt.user
 
 # Project Files
-*.user
+*.user*
 
 # Token File
 config/token.h

@@ -9,23 +9,24 @@
 #define MAX_USER_NOTE_SIZE 256
 #define MAX_DEFAULT_NOTE_SIZE 512
 
-enum EVENT_TYPE
-{
-  EVENT_TYPE_LECTURE,
-  EVENT_TYPE_SEMINAR,
-  EVENT_TYPE_SPEC_LECTURE,
-  EVENT_TYPE_SPEC_SEMINAR,
-  EVENT_TYPE_STUDENT_COUNCIL,
-  EVENT_TYPE_OTHER
-};
-
-class event_class
+class event_t
 {
   public:
-    event_class (boost::posix_time::ptime date_time_arg, std::string &name_arg, EVENT_TYPE etype_arg);
-    ~event_class ();
-    event_class (const event_class &rhs);
-    event_class &operator= (const event_class &rhs);
+    enum event_type
+      {
+        lecture,
+        seminar,
+        spec_lecture,
+        spec_seminar,
+        other,
+
+        COUNT
+      };
+
+    event_t (boost::posix_time::ptime date_time_arg, std::string &name_arg, event_type etype_arg);
+    ~event_t ();
+    event_t (const event_t &rhs);
+    event_t &operator= (const event_t &rhs);
 
     // getters
     const boost::gregorian::date get_date () const {return event_date_time.date ();}
@@ -37,7 +38,7 @@ class event_class
     const std::string &get_user_note () const {return user_note;}
 
     // setters
-    void change_type (EVENT_TYPE new_etype) {etype = new_etype;}
+    void change_type (event_type new_etype) {etype = new_etype;}
     void set_place (std::string &new_place) {place = std::move (new_place);}
 
     // other
@@ -53,11 +54,10 @@ class event_class
 
     bool is_empty (); // maybe not neccecary
 
-
   private:
     boost::posix_time::ptime event_date_time;
     std::string name;
-    EVENT_TYPE etype;
+    event_type etype;
     std::vector<boost::posix_time::ptime> notify_vector;
     std::string place;
     std::string default_note;
