@@ -47,11 +47,13 @@ const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
 
 void event_t::add_notify (pt::ptime new_notify)
 {
+  auto right_edge = new_notify + boost::posix_time::minutes(1);
+  auto left_edge = new_notify - boost::posix_time::minutes(1);
   if (!notify_vector.empty ())
     {
       for (auto i = notify_vector.begin (); i != notify_vector.end (); i++)
         {
-          if (*i == new_notify)  // This one alreade exists
+          if (left_edge < *i && *i < right_edge)  // This one alreade exists
             return;
           if (new_notify < *i)
             {
