@@ -143,5 +143,30 @@ void sch_bot::send_message_admins (const std::string &text) const
       send_message (id, "[Admin Report]" + sbot::empty_line + text);
     }
 }
+
+void sch_bot::notify_all ()
+{
+  // TODO: refactor with a notify-queue container to prevent useless work
+  for (auto &user_it : users)
+    {
+      user_t user = user_it.second;
+      notify_user (user);
     }
+}
+
+void sch_bot::notify_user (user_t user)
+{
+  // TODO: implement user events getter and notifying
+  boost::posix_time::ptime time = curr_time ();
+
+  boost::posix_time::time_duration from_last_notify = time - user.last_notify;
+  if (from_last_notify.total_seconds () < 300)
+    return;
+  user.last_notify = time;
+
+  std::string message = sbot::program + " every 5 minute notifiyng test. Current time: " + boost::posix_time::to_simple_string (time)
+                      + sbot::empty_line
+                      + StringTools::generateRandomString (256);
+
+  send_message (user.get_id (), message);
 }

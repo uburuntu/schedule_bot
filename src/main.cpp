@@ -54,6 +54,7 @@ int main (int /* argc */, char *argv[])
       while (!signal_got)
         {
           long_poll.start ();
+          bot.notify_all ();
         }
     }
   catch (std::exception &e)
