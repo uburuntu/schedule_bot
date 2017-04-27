@@ -45,12 +45,23 @@ void sch_bot::init_commands ()
       return;
 
     send_message_admins (message_in->chat->username + " killed me :(\n\nRestart server now.");
-    raise (SIGINT);
+    //raise (SIGINT);
   };
 
   auto all_handle = [this] (TgBot::Message::Ptr message_in)
   {
     send_message_all (message_in->chat->username + ":\n" + message_in->text);
+  };
+
+  auto flood_handle = [this] (TgBot::Message::Ptr message_in)
+  {
+    send_message_all (message_in->chat->username + " started the /flood testing. Aaaaaa!\n");
+
+    static const int n_flood = 20;
+    for (int i = 0; i < n_flood; i++)
+      {
+        send_message_all (std::to_string (i + 1) + " from " + std::to_string (n_flood) + sbot::empty_line + StringTools::generateRandomString (30));
+      }
   };
 
   auto unknown_command_handle = [this] (TgBot::Message::Ptr message_in)
@@ -60,7 +71,10 @@ void sch_bot::init_commands ()
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    printf ("[LOW] User (name = %s, id = %ld) wrote '%s'\n", message_in->chat->username.c_str (), message_in->chat->id, message_in->text.c_str());
+    printf ("[LOW] [%s] User (name = %s, id = %ld) wrote '%s'\n", boost::posix_time::to_simple_string (curr_time ()).c_str (),
+                                                                  message_in->chat->username.c_str (),
+                                                                  message_in->chat->id,
+                                                                  message_in->text.c_str());
 
     if (StringTools::startsWith (message_in->text, "/"))
       {
@@ -78,6 +92,7 @@ void sch_bot::init_commands ()
   getEvents ().onCommand ("debug", debug_handle);
   getEvents ().onCommand ("kill", kill_handle);
   getEvents ().onCommand ("all", all_handle);
+  getEvents ().onCommand ("flood", flood_handle);
 }
 
 void sch_bot::init_users ()
@@ -87,7 +102,7 @@ void sch_bot::init_users ()
   add_admin (sbot::a_id);
   add_admin (sbot::v_id);
 
-  send_message_admins ("Bot started, current version: " + sbot::version);
+  send_message_admins ("Bot started, current version: " + sbot::version + ". Build time: " + sbot::build_date + " " + sbot::build_time);
 
   // TODO: implement users import / export
 }
@@ -149,12 +164,11 @@ void sch_bot::notify_all ()
   // TODO: refactor with a notify-queue container to prevent useless work
   for (auto &user_it : users)
     {
-      user_t user = user_it.second;
-      notify_user (user);
+      notify_user (user_it.second);
     }
 }
 
-void sch_bot::notify_user (user_t user)
+void sch_bot::notify_user (user_t &user)
 {
   // TODO: implement user events getter and notifying
   boost::posix_time::ptime time = curr_time ();
@@ -166,7 +180,7 @@ void sch_bot::notify_user (user_t user)
 
   std::string message = sbot::program + " every 5 minute notifiyng test. Current time: " + boost::posix_time::to_simple_string (time)
                       + sbot::empty_line
-                      + StringTools::generateRandomString (256);
+                      + StringTools::generateRandomString (16);
 
   send_message (user.get_id (), message);
 }

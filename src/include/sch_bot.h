@@ -31,7 +31,7 @@ class sch_bot : public TgBot::Bot
 
     // Notify methods
     void notify_all ();
-    void notify_user (user_t user);
+    void notify_user (user_t &user);
 
     // Users methods
     void add_user (user_id id);

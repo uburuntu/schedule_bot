@@ -10,6 +10,8 @@ namespace sbot
 {
   static const std::string program = "Schedule Bot";
   static const std::string version = "0.0.3";
+  static const std::string build_date = __DATE__;
+  static const std::string build_time = __TIME__;
 
   static const std::string empty_line = "\n\n";
 
