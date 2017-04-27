@@ -23,8 +23,10 @@ INCLUDEPATH *= src src/include config
 
 CONFIG(debug, debug|release) {
     DESTDIR = build.dbg
+    DEFINES += BOT_DEBUG_EDITION=1
 } else {
     DESTDIR = build
+    DEFINES += BOT_RELEASE_EDITION=1
 }
 
 OBJECTS_DIR = $$DESTDIR/obj
