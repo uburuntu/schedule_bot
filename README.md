@@ -14,9 +14,9 @@ Telegram bot for easy scheduling with notifying
 * [TgBot](https://github.com/reo7sp/tgbot-cpp), C++ library for Telegram bot API
   * Special thanks to its developer [@reo7sp](https://github.com/reo7sp)
 * [Travis CI](https://travis-ci.org/uburuntu/schedule_bot), automated system to build and test any projects
-* [Cppcheck](http://cppcheck.sourceforge.net) 1.67 (or newer)
+* [Cppcheck](http://cppcheck.sourceforge.net) 1.67 (or newer), static C/C++ code analysis tool
   * Script with config: [cppcheck.sh](https://github.com/uburuntu/schedule_bot/blob/master/cppcheck.sh)
-* [AStyle](https://astyle.sourceforge.net) 3.0 (or newer), automatic code formatter
+* [AStyle](http://astyle.sourceforge.net) 3.0 (or newer), automatic code formatter
   * Our team code style options: [code_style.astylerc](https://github.com/uburuntu/schedule_bot/blob/master/config/code_style.astylerc)
   * It used with [QtCreator](https://www.qt.io/ide) module [Beautifier](http://doc.qt.io/qtcreator/creator-beautifier.html)
 
