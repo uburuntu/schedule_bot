@@ -46,4 +46,5 @@ SOURCES += src/main.cpp \
     src/sch_bot.cpp
 
 DISTFILES += \
-    config/code_style.astylerc
+    config/code_style.astylerc \
+    config/emojis.json

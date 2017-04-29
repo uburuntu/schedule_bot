@@ -24,9 +24,14 @@
 #include <signal.h>
 #include <exception>
 
+#include <boost/property_tree/ptree.hpp>
+
 #include <tgbot/tgbot.h>
+
 #include "sch_bot.h"
 #include "token.h"
+
+namespace pt = boost::property_tree;
 
 volatile sig_atomic_t signal_got = 0;
 
@@ -34,6 +39,15 @@ int main (int /* argc */, char *argv[])
 {
   // Signal handler
   signal (SIGINT, [] (int s) { printf ("[HIGH] Program got SIGINT signal, aborting...\n"); signal_got = s;});
+
+  // Initialize data
+  pt::ptree emojis;
+  pt::read_json ("config/emojis.json", emojis);
+
+  emojis;
+
+  if (1)
+    return 0;
 
   // Create and initialize bot
   sch_bot bot (API_TOKEN);
