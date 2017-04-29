@@ -38,12 +38,14 @@ HEADERS += \
     src/include/event.h \
     src/include/sch_bot.h \
     src/include/utils.h \
-    src/include/defaults.h
+    src/include/defaults.h \
+    src/include/report_system.h
 
 SOURCES += src/main.cpp \
     src/user.cpp \
     src/event.cpp \
-    src/sch_bot.cpp
+    src/sch_bot.cpp \
+    src/report_system.cpp
 
 DISTFILES += \
     config/code_style.astylerc
