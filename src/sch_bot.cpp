@@ -71,7 +71,7 @@ void sch_bot::init_commands ()
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    printf ("[LOW] [%s] User (name = %s, id = %ld) wrote '%s'\n", boost::posix_time::to_simple_string (curr_time ()).c_str (),
+    printf ("[LOW] [%s] User (name = %s, id = %ld) wrote '%s'\n", pt::to_simple_string (sbot::curr_time ()).c_str (),
                                                                   message_in->chat->username.c_str (),
                                                                   message_in->chat->id,
                                                                   message_in->text.c_str());
@@ -171,14 +171,14 @@ void sch_bot::notify_all ()
 void sch_bot::notify_user (user_t &user)
 {
   // TODO: implement user events getter and notifying
-  boost::posix_time::ptime time = curr_time ();
+  pt::ptime time = sbot::curr_time ();
 
-  boost::posix_time::time_duration from_last_notify = time - user.last_notify;
+  pt::time_duration from_last_notify = time - user.last_notify;
   if (from_last_notify.total_seconds () < 300)
     return;
   user.last_notify = time;
 
-  std::string message = sbot::program + " every 5 minute notifiyng test. Current time: " + boost::posix_time::to_simple_string (time)
+  std::string message = sbot::program + " every 5 minute notifiyng test. Current time: " + pt::to_simple_string (time)
                       + sbot::empty_line
                       + StringTools::generateRandomString (16);
 

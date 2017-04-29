@@ -39,8 +39,6 @@ class sch_bot : public TgBot::Bot
     bool user_exist (user_id id) const;
     bool is_admin (user_id id) const;
 
-    static boost::posix_time::ptime curr_time () { return boost::posix_time::second_clock::local_time ();};
-
   private:
     std::map<user_id, user_t> users;
     std::set<user_id> admins;

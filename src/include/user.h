@@ -16,13 +16,13 @@ public:
 
     user_t (user_id id) : id (id)
       {
-        last_notify = boost::posix_time::second_clock::local_time ();
+        last_notify = sbot::curr_time ();
       }
     user_id get_id () const { return id;}
 
-    void switch_debug () { switch_bool (debug_mode);}
+    void switch_debug () { sbot::switch_bool (debug_mode);}
 
-    boost::posix_time::ptime last_notify;
+    pt::ptime last_notify;
 
 private:
     bool debug_mode = false;

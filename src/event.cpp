@@ -1,6 +1,6 @@
 #include "event.h"
 
-event_t::event_t(boost::posix_time::ptime date_time_arg, std::string &name_arg, event_type etype_arg)
+event_t::event_t(pt::ptime date_time_arg, std::string &name_arg, event_type etype_arg)
   : event_date_time (date_time_arg), name (name_arg), etype (etype_arg)
 {
 
@@ -8,7 +8,7 @@ event_t::event_t(boost::posix_time::ptime date_time_arg, std::string &name_arg, 
 
 event_t::~event_t ()
 {
-  event_date_time = boost::posix_time::not_a_date_time;
+  event_date_time = pt::not_a_date_time;
   name.clear ();
   notify_vector.clear ();
   default_note.clear ();
@@ -45,7 +45,7 @@ const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
   return event_date_time.date ().day_of_week ();
 }
 
-void event_t::add_notify (boost::posix_time::ptime new_notify)
+void event_t::add_notify (pt::ptime new_notify)
 {
   if (!notify_vector.empty ())
     {
@@ -63,7 +63,7 @@ void event_t::add_notify (boost::posix_time::ptime new_notify)
   notify_vector.push_back (new_notify);
 }
 
-void event_t::remove_notify (boost::posix_time::ptime notify_to_remove)
+void event_t::remove_notify (pt::ptime notify_to_remove)
 {
   for (auto i = notify_vector.begin (); i != notify_vector.end (); i++)
     if (*i == notify_to_remove)
@@ -109,7 +109,7 @@ int event_t::rewrite_default_note (std::string &new_default_note)
 
 bool event_t::is_empty () // maybe not neccecary
 {
-  return event_date_time == boost::posix_time::not_a_date_time
+  return event_date_time == pt::not_a_date_time
       && notify_vector.empty ()
       && place.empty ()
       && name.empty ()
