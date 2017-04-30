@@ -5,6 +5,7 @@
 #include <memory>
 #include <sys/stat.h>
 #include "defaults.h"
+#include "utils.h"
 
 class report_system
 {
@@ -12,41 +13,46 @@ class report_system
     report_system ()
     {
       mkdir (sbot::prefix_dir.c_str (), S_IRWXU | S_IRWXG | S_IRWXO);
+
       for (int type = (int) info; type < (int) count; type++)
         {
           // TODO: realize checks
-          //log_files[type].open (sbot::prefix_dir + enum_to_string ((log_type) type) + ".log", std::ios_base::out | std::ios_base::app);
+          log_files[type].open (sbot::prefix_dir + enum_to_string ((log_type) type) + ".log", std::ios_base::out | std::ios_base::app);
         }
     }
     ~report_system ()
     {
+      std::string time = pt::to_simple_string (sbot::curr_time ());
       for (int type = (int) info; type < (int) count; type++)
         {
-          //log_files[type] << "[END] Total " << enum_to_string ((log_type) type) << ": " << log_count[type];
-          //log_files[type].close ();
+          log_files[type] << "[END] [" + time + "] Total " << enum_to_string ((log_type) type) << ": " << log_count[type] << sbot::empty_line;
+          log_files[type].close ();
         }
     }
 
     enum log_type
     {
       info,
-      message,
+      message_in,
+      message_out,
       warning,
       error,
 
-      count = error
+      count
     };
 
     void print (const log_type &type, const char *format, ...);
 
-    static void print (const char *format, ...);
-    static void print (FILE *stream, const char *format, ...);
+    static void print (const char *format, FILE *stream = stdout);
+    static void print_error (const char *format);
 
     static const char *enum_to_string (const log_type &type);
 
   private:
+    char buf[sbot::buf_size] = {};
+
     long long int log_count[log_type::count] = {};
-    //std::fstream log_files[log_type::count];
+    std::fstream log_files[log_type::count];
 };
 
 using rep = report_system;

@@ -44,8 +44,12 @@ void sch_bot::init_commands ()
     if (!is_admin (message_in->chat->id))
       return;
 
-    send_message_admins (message_in->chat->username + " killed me :(\n\nRestart server now.");
-    //raise (SIGINT);
+    static int kill_count = 0;
+    if (kill_count++ > 1)
+      {
+        send_message_admins (message_in->chat->username + " killed me :(\n\nRestart server now.");
+        raise (SIGINT);
+      }
   };
 
   auto all_handle = [this] (TgBot::Message::Ptr message_in)
@@ -72,10 +76,10 @@ void sch_bot::init_commands ()
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    rep->print (rep::message, "User (name = %s, id = %ld) wrote '%s'",
-                              message_in->chat->username.c_str (),
-                              message_in->chat->id,
-                              message_in->text.c_str());
+    rep->print (rep::message_in, "User (name = %s, id = %ld) wrote '%s'",
+                                 message_in->chat->username.c_str (),
+                                 message_in->chat->id,
+                                 message_in->text.c_str());
 
     if (StringTools::startsWith (message_in->text, "/"))
       return;
@@ -101,7 +105,7 @@ void sch_bot::init_users ()
   add_admin (sbot::a_id);
   add_admin (sbot::v_id);
 
-  send_message_admins ("Bot started, current version: " + sbot::version + ". Build time: " + sbot::build_date + " " + sbot::build_time);
+  send_message_admins ("Bot started, current version: " + sbot::version + ".\nBuild time: " + sbot::build_date + " " + sbot::build_time);
 
   // TODO: implement users import / export
 }
@@ -130,14 +134,16 @@ bool sch_bot::is_admin (user_id id) const
   return admins.find (id) != admins.end ();
 }
 
-void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string &text) const
-{
-  getApi ().sendMessage (message->chat->id, text);
-}
-
 void sch_bot::send_message (user_id id, const std::string &text) const
 {
+  rep->print (rep::message_out, "[To id = %ld] \n\"\n%s\n\"", id, text.c_str ());
+
   getApi ().sendMessage (id, text);
+}
+
+void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string &text) const
+{
+  send_message (message->chat->id, text);
 }
 
 void sch_bot::send_message_all (const std::string &text) const
@@ -179,7 +185,7 @@ void sch_bot::notify_user (user_t &user)
 
   user.last_notify = time;
 
-  std::string message = sbot::program + " every 5 minute notifiyng test. Current time: " + pt::to_simple_string (time)
+  std::string message = sbot::program + " every 5 minute notifiyng test.\nCurrent time: " + pt::to_simple_string (time)
                         + sbot::empty_line
                         + StringTools::generateRandomString (16);
 

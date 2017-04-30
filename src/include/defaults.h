@@ -9,13 +9,16 @@ typedef int64_t user_id;
 namespace sbot
 {
   static const std::string program = "Schedule Bot";
-  static const std::string version = "0.0.3";
+  static const std::string version = "0.0.4";
 
   static const std::string prefix_dir = "./sbot/";
   static const std::string build_date = __DATE__;
   static const std::string build_time = __TIME__;
 
   static const std::string empty_line = "\n\n";
+
+  static const size_t max_message_length = 4096;
+  static const size_t buf_size = 3 * max_message_length;
 
   static const user_id r_id = 28006241;
   static const user_id a_id = 3191519;

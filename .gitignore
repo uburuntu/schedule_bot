@@ -43,6 +43,7 @@ CMakeLists.txt.user
 
 # Project Files
 *.user*
+*.log
 
 # Token File
 config/token.h

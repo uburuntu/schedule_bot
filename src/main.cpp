@@ -36,11 +36,12 @@ volatile sig_atomic_t signal_got = 0;
 int main (int /* argc */, char *argv[])
 {
   // Signal handler
-  signal (SIGINT, [] (int s) { printf ("[HIGH] Program got SIGINT signal, aborting...\n"); signal_got = s;});
+  signal (SIGINT, [] (int s) { printf ("[CRITICAL] Program got SIGINT signal, aborting...\n"); signal_got = s;});
 
   // Create report system
   rep_ptr rep = std::make_shared<report_system> ();
   rep->print (rep::info, "The program '%s' started work", argv[0]);
+  rep->print (rep::info, "Build time: %s %s", sbot::build_date.c_str (), sbot::build_time.c_str ());
 
   // Create and initialize bot
   sch_bot bot (API_TOKEN, rep);

@@ -48,4 +48,6 @@ SOURCES += src/main.cpp \
     src/report_system.cpp
 
 DISTFILES += \
-    config/code_style.astylerc
+    config/code_style.astylerc \
+    .gitignore \
+    .travis.yml
