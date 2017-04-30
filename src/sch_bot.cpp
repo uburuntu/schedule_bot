@@ -15,8 +15,8 @@ void sch_bot::init_commands ()
     add_user (id);
 
     std::string start_answer = "Привет, красавчик! Ты попал к лучшему боту в Телеграме."
-                             + sbot::empty_line
-                             + "Вызови /help для помощи.";
+                               + sbot::empty_line
+                               + "Вызови /help для помощи.";
 
     send_message (message_in, start_answer);
   };
@@ -24,8 +24,8 @@ void sch_bot::init_commands ()
   auto help_handle = [this] (TgBot::Message::Ptr message_in)
   {
     std::string help_answer = "Этот бот предназначен для оповещения о парах, об их аудиториях или других событий в вашей жизни, которые нельзя пропустить."
-                            + sbot::empty_line
-                            + "Бот находится в стадии активной разработки, о найденных багах пишите: @rm_bk, @Aenglsmith или @crazyvaskya.";
+                              + sbot::empty_line
+                              + "Бот находится в стадии активной разработки, о найденных багах пишите: @rm_bk, @Aenglsmith или @crazyvaskya.";
 
     send_message (message_in, help_answer);
   };
@@ -33,7 +33,9 @@ void sch_bot::init_commands ()
   auto debug_handle = [this] (TgBot::Message::Ptr message_in)
   {
     if (!is_admin (message_in->chat->id))
-      return;
+      {
+        return;
+      }
 
     users[message_in->chat->id].switch_debug ();
     send_message (message_in, "Debug mode enabled. You will be notified about some serious shit.");
@@ -42,7 +44,9 @@ void sch_bot::init_commands ()
   auto kill_handle = [this] (TgBot::Message::Ptr message_in)
   {
     if (!is_admin (message_in->chat->id))
-      return;
+      {
+        return;
+      }
 
     send_message_admins (message_in->chat->username + " killed me :(\n\nRestart server now.");
     //raise (SIGINT);
@@ -58,6 +62,7 @@ void sch_bot::init_commands ()
     send_message_all (message_in->chat->username + " started the /flood testing. Aaaaaa!\n");
 
     static const int n_flood = 20;
+
     for (int i = 0; i < n_flood; i++)
       {
         send_message_all (std::to_string (i + 1) + " from " + std::to_string (n_flood) + sbot::empty_line + StringTools::generateRandomString (30));
@@ -71,10 +76,10 @@ void sch_bot::init_commands ()
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    printf ("[LOW] [%s] User (name = %s, id = %ld) wrote '%s'\n", pt::to_simple_string (sbot::curr_time ()).c_str (),
-                                                                  message_in->chat->username.c_str (),
-                                                                  message_in->chat->id,
-                                                                  message_in->text.c_str());
+    rep->print (rep::message, "User (name = %s, id = %ld) wrote '%s'",
+                              message_in->chat->username.c_str (),
+                              message_in->chat->id,
+                              message_in->text.c_str());
 
     if (StringTools::startsWith (message_in->text, "/"))
       {
@@ -174,13 +179,17 @@ void sch_bot::notify_user (user_t &user)
   pt::ptime time = sbot::curr_time ();
 
   pt::time_duration from_last_notify = time - user.last_notify;
+
   if (from_last_notify.total_seconds () < 300)
-    return;
+    {
+      return;
+    }
+
   user.last_notify = time;
 
   std::string message = sbot::program + " every 5 minute notifiyng test. Current time: " + pt::to_simple_string (time)
-                      + sbot::empty_line
-                      + StringTools::generateRandomString (16);
+                        + sbot::empty_line
+                        + StringTools::generateRandomString (16);
 
   send_message (user.get_id (), message);
 }

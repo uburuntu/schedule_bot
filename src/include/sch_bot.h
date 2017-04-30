@@ -9,13 +9,14 @@
 
 #include "defaults.h"
 #include "event.h"
+#include "report_system.h"
 #include "user.h"
 
 class sch_bot : public TgBot::Bot
 {
   public:
     explicit sch_bot (const std::string &token) : TgBot::Bot (token)
-      {}
+    {}
 
     void init_commands ();
     void init_users ();
@@ -38,6 +39,12 @@ class sch_bot : public TgBot::Bot
     void add_admin (user_id id);
     bool user_exist (user_id id) const;
     bool is_admin (user_id id) const;
+
+    rep_ptr rep;
+    void set_report_system (rep_ptr &rep_in)
+    {
+      rep = rep_in;
+    }
 
   private:
     std::map<user_id, user_t> users;

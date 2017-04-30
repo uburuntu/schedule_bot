@@ -23,8 +23,11 @@
 #include <stdio.h>
 #include <signal.h>
 #include <exception>
+#include <memory>
 
 #include <tgbot/tgbot.h>
+
+#include "report_system.h"
 #include "sch_bot.h"
 #include "token.h"
 
@@ -35,31 +38,41 @@ int main (int /* argc */, char *argv[])
   // Signal handler
   signal (SIGINT, [] (int s) { printf ("[HIGH] Program got SIGINT signal, aborting...\n"); signal_got = s;});
 
+  // Create report system to unified printing and logging
+  rep_ptr rep = std::make_shared<report_system> ();
+
   // Create and initialize bot
   sch_bot bot (API_TOKEN);
+  bot.set_report_system (rep);
   bot.init_users ();
   bot.init_commands ();
 
   // Log info
-  printf ("[INFO] The program '%s' started work\n", argv[0]);
-  printf ("[INFO] Bot id: %d\n", bot.getApi ().getMe ()->id);
-  printf ("[INFO] Bot username: %s\n", bot.getApi ().getMe ()->username.c_str ());
+  rep->print (rep::info, "The program '%s' started work", argv[0]);
+  rep->print (rep::info, "Bot id: %d", bot.getApi ().getMe ()->id);
+  rep->print (rep::info, "Bot username: %s", bot.getApi ().getMe ()->username.c_str ());
 
   // Run loop to handle messages
-  try
+  while (1)
     {
-      TgBot::TgLongPoll long_poll (bot);
-
-      printf ("[LOW] Long poll started\n");
-      while (!signal_got)
+      try
         {
-          long_poll.start ();
-          bot.notify_all ();
+          TgBot::TgLongPoll long_poll (bot);
+
+          rep->print (rep::info, "Long poll started");
+          while (1)
+            {
+              long_poll.start ();
+              bot.notify_all ();
+
+              if (signal_got)
+                return 0;
+            }
         }
-    }
-  catch (std::exception &e)
-    {
-      printf ("[HIGH] Error: %s\n", e.what ());
+      catch (std::exception &e)
+        {
+          rep->print (rep::error, "Exception: %s", e.what ());
+        }
     }
 
   return 0;
