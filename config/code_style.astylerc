@@ -7,9 +7,8 @@ indent-cases
 indent-namespaces
 indent-preproc-block
 indent-preproc-define
+indent-preproc-cond
 indent-col1-comments
-break-blocks
-remove-braces
 pad-oper
 pad-comma
 pad-first-paren-out
@@ -18,5 +17,6 @@ align-pointer=name
 align-reference=name
 break-closing-braces
 break-one-line-headers
-add-braces
+keep-one-line-blocks
 convert-tabs
+#remove-braces

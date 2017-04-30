@@ -1,6 +1,6 @@
 #include "event.h"
 
-event_t::event_t(pt::ptime date_time_arg, std::string &name_arg, event_type etype_arg)
+event_t::event_t (pt::ptime date_time_arg, std::string &name_arg, event_type etype_arg)
   : event_date_time (date_time_arg), name (name_arg), etype (etype_arg)
 {
 
@@ -110,9 +110,9 @@ int event_t::rewrite_default_note (std::string &new_default_note)
 bool event_t::is_empty () // maybe not neccecary
 {
   return event_date_time == pt::not_a_date_time
-      && notify_vector.empty ()
-      && place.empty ()
-      && name.empty ()
-      && user_note.empty ()
-      && default_note.empty ();
+         && notify_vector.empty ()
+         && place.empty ()
+         && name.empty ()
+         && user_note.empty ()
+         && default_note.empty ();
 }

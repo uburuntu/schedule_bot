@@ -15,15 +15,15 @@ class event_t
 {
   public:
     enum event_type
-      {
-        lecture,
-        seminar,
-        spec_lecture,
-        spec_seminar,
-        other,
+    {
+      lecture,
+      seminar,
+      spec_lecture,
+      spec_seminar,
+      other,
 
-        COUNT
-      };
+      COUNT
+    };
 
     event_t (pt::ptime date_time_arg, std::string &name_arg, event_type etype_arg);
     ~event_t ();

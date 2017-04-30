@@ -38,19 +38,12 @@ int main (int /* argc */, char *argv[])
   // Signal handler
   signal (SIGINT, [] (int s) { printf ("[HIGH] Program got SIGINT signal, aborting...\n"); signal_got = s;});
 
-  // Create report system to unified printing and logging
+  // Create report system
   rep_ptr rep = std::make_shared<report_system> ();
+  rep->print (rep::info, "The program '%s' started work", argv[0]);
 
   // Create and initialize bot
-  sch_bot bot (API_TOKEN);
-  bot.set_report_system (rep);
-  bot.init_users ();
-  bot.init_commands ();
-
-  // Log info
-  rep->print (rep::info, "The program '%s' started work", argv[0]);
-  rep->print (rep::info, "Bot id: %d", bot.getApi ().getMe ()->id);
-  rep->print (rep::info, "Bot username: %s", bot.getApi ().getMe ()->username.c_str ());
+  sch_bot bot (API_TOKEN, rep);
 
   // Run loop to handle messages
   while (1)

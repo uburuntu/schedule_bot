@@ -15,9 +15,16 @@
 class sch_bot : public TgBot::Bot
 {
   public:
-    explicit sch_bot (const std::string &token) : TgBot::Bot (token)
-    {}
+    sch_bot (const std::string &token, rep_ptr rep) : TgBot::Bot (token), rep (rep)
+    {
+      rep->print (rep::info, "Bot id: %d", getApi ().getMe ()->id);
+      rep->print (rep::info, "Bot username: %s", getApi ().getMe ()->username.c_str ());
 
+      init_users ();
+      init_commands ();
+    }
+
+    // Initialize functions
     void init_commands ();
     void init_users ();
 
@@ -41,10 +48,6 @@ class sch_bot : public TgBot::Bot
     bool is_admin (user_id id) const;
 
     rep_ptr rep;
-    void set_report_system (rep_ptr &rep_in)
-    {
-      rep = rep_in;
-    }
 
   private:
     std::map<user_id, user_t> users;

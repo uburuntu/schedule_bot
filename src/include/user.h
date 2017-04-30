@@ -8,23 +8,23 @@
 
 class user_t
 {
-public:
+  public:
     user_t () = default;
     ~user_t () = default;
     user_t (const user_t &rhs) = default;
     user_t &operator= (const user_t &) = default;
 
     user_t (user_id id) : id (id)
-      {
-        last_notify = sbot::curr_time ();
-      }
+    {
+      last_notify = sbot::curr_time ();
+    }
     user_id get_id () const { return id;}
 
     void switch_debug () { sbot::switch_bool (debug_mode);}
 
     pt::ptime last_notify;
 
-private:
+  private:
     bool debug_mode = false;
     user_id id = 0;
 };

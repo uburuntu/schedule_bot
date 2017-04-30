@@ -33,9 +33,7 @@ void sch_bot::init_commands ()
   auto debug_handle = [this] (TgBot::Message::Ptr message_in)
   {
     if (!is_admin (message_in->chat->id))
-      {
-        return;
-      }
+      return;
 
     users[message_in->chat->id].switch_debug ();
     send_message (message_in, "Debug mode enabled. You will be notified about some serious shit.");
@@ -44,9 +42,7 @@ void sch_bot::init_commands ()
   auto kill_handle = [this] (TgBot::Message::Ptr message_in)
   {
     if (!is_admin (message_in->chat->id))
-      {
-        return;
-      }
+      return;
 
     send_message_admins (message_in->chat->username + " killed me :(\n\nRestart server now.");
     //raise (SIGINT);
@@ -82,9 +78,7 @@ void sch_bot::init_commands ()
                               message_in->text.c_str());
 
     if (StringTools::startsWith (message_in->text, "/"))
-      {
-        return;
-      }
+      return;
 
     send_message (message_in, "Your message is: " + message_in->text);
   };
@@ -181,9 +175,7 @@ void sch_bot::notify_user (user_t &user)
   pt::time_duration from_last_notify = time - user.last_notify;
 
   if (from_last_notify.total_seconds () < 300)
-    {
-      return;
-    }
+    return;
 
   user.last_notify = time;
 
