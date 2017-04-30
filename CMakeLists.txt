@@ -10,13 +10,14 @@ set(Boost_USE_MULTITHREADED ON)
 
 # Set project params
 set(EXECUTABLE schedule_bot)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -W -Wall -Wcast-align -pedantic -fstack-protector-all -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wcast-align -Wno-format -Wno-long-long -Wmissing-declarations")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -W -Wall -Wcast-align -pedantic -fstack-protector-all -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wcast-align -Wno-format -Wno-long-long -Wmissing-declarations -Wno-unused-function")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
 
 # Source files list
 set(SOURCES_LIST src/main.cpp
                  src/user.cpp
                  src/event.cpp
+                 src/report_system.cpp
                  src/sch_bot.cpp)
 
 # Headers directories list
