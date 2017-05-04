@@ -98,6 +98,69 @@ void sch_bot::init_commands ()
   getEvents ().onCommand ("flood", flood_handle);
 }
 
+void sch_bot::init_database ()
+{
+  QString str;
+  bool ret;
+
+  db = QSqlDatabase::addDatabase ("QSQLITE");
+  db.setDatabaseName ("db.sqlite");
+
+  if (!db.open ())
+    {
+      printf ("[HIGH] Cannot open database\n");
+      return;
+    }
+
+  db_query = QSqlQuery (db);
+
+  str = "CREATE TABLE my_table ("
+        "number integer PRIMARY KEY NOT NULL, "
+        "address VARCHAR(255), "
+        "age integer"
+        ");";
+
+  ret = db_query.exec (str);
+  if (!ret)
+    {
+      printf ("[HIGH] Cannot create table\n");
+      return;
+    }
+
+  QString str_insert = "INSERT INTO my_table(number, address, age) "
+                       "VALUES (%1, '%2', %3);";
+
+  str = str_insert.arg ("14")
+        .arg ("hello world str.")
+        .arg ("37");
+
+  ret = db_query.exec (str);
+  if (!ret)
+    {
+      printf ("[HIGH] Cannot insert in table\n");
+      return;
+    }
+
+  ret = db_query.exec ("SELECT * FROM my_table");
+  if (!ret)
+    {
+      printf ("[HIGH] Cannot insert in table\n");
+      return;
+    }
+
+  QSqlRecord rec = db_query.record ();
+  while (db_query.next())
+    {
+      int number = db_query.value (rec.indexOf ("number")).toInt ();
+      int age = db_query.value (rec.indexOf ("age")).toInt ();
+      QString address = db_query.value (rec.indexOf ("address")).toString ();
+
+      qDebug() << "number is " << number
+                    << ". age is " << age
+                    << ". address" << address;
+    }
+}
+
 void sch_bot::init_users ()
 {
   // Developer's id as admins

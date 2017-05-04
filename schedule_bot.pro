@@ -2,7 +2,8 @@ TARGET = schedule_bot
 
 TEMPLATE = app
 
-QT -= gui core
+QT -= gui
+QT += core sql
 
 CONFIG += debug_and_release
 CONFIG += console

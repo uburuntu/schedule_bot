@@ -7,6 +7,8 @@
 
 #include <tgbot/Bot.h>
 
+#include <QtSql>
+
 #include "defaults.h"
 #include "event.h"
 #include "report_system.h"
@@ -20,12 +22,14 @@ class sch_bot : public TgBot::Bot
       rep->print (rep::info, "Bot id: %d", getApi ().getMe ()->id);
       rep->print (rep::info, "Bot username: %s", getApi ().getMe ()->username.c_str ());
 
+      init_database ();
       init_users ();
       init_commands ();
     }
 
     // Initialize functions
     void init_commands ();
+    void init_database ();
     void init_users ();
 
     // Send answer to input message
@@ -50,6 +54,8 @@ class sch_bot : public TgBot::Bot
     rep_ptr rep;
 
   private:
+    QSqlDatabase db;
+    QSqlQuery db_query;
     std::map<user_id, user_t> users;
     std::set<user_id> admins;
 };
