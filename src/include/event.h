@@ -56,6 +56,10 @@ class event_t
 
     bool is_empty (); // maybe not neccecary
 
+#ifdef BOT_DEBUG_EDITION
+    void print_event (); /// THAT IS TEMPORARY DEBUG FUNCTION
+#endif
+
   private:
     pt::ptime event_date_time;
     std::string name;
@@ -65,5 +69,9 @@ class event_t
     std::string default_note;
     std::string user_note;
 };
+
+#ifdef BOT_DEBUG_EDITION
+void event_test_function (); /// DEBUG FUNCTION
+#endif
 
 #endif // EVENT_H
