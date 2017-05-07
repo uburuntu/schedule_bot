@@ -17,14 +17,11 @@ event_t::~event_t ()
 
 //should be copying everywhere
 event_t::event_t (const event_t &rhs)
+    : event_date_time (rhs.event_date_time), name (rhs.name),
+      etype (rhs.etype), notify_vector (rhs.notify_vector),
+      place (rhs.place), default_note (rhs.default_note), user_note (rhs.user_note)
 {
-  event_date_time = rhs.event_date_time;
-  name = rhs.name;
-  etype = rhs.etype;
-  notify_vector = rhs.notify_vector;
-  place = rhs.place;
-  default_note = rhs.default_note;
-  user_note = rhs.user_note;
+
 }
 
 //should be copying everywhere

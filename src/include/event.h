@@ -54,7 +54,7 @@ class event_t
     void remove_notify (pt::ptime notify_to_remove);
     void clear_notify () {notify_vector.clear ();}
 
-    bool is_empty (); // maybe not neccecary
+    bool is_empty(); // maybe not neccecary
 
 #ifdef BOT_DEBUG_EDITION
     void print_event (); /// THAT IS TEMPORARY DEBUG FUNCTION
