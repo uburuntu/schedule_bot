@@ -49,7 +49,7 @@ const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
   return event_date_time.date ().day_of_week ();
 }
 
-void event_t::add_notify (pt::ptime new_notify)
+int event_t::add_notify (pt::ptime new_notify)
 {
   auto right_edge = new_notify + boost::posix_time::minutes(1);
   auto left_edge = new_notify - boost::posix_time::minutes(1);
@@ -58,11 +58,11 @@ void event_t::add_notify (pt::ptime new_notify)
       for (auto i = notify_vector.begin (); i != notify_vector.end (); i++)
         {
           if (left_edge < *i && *i < right_edge)  // This one alreade exists
-            return;
+            return -1;
           if (new_notify < *i)
             {
               notify_vector.insert (i, new_notify);
-              return;
+              return 0;
             }
         }
     }
