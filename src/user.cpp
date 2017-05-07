@@ -56,7 +56,7 @@ void user_t::remove_past_events (pt::ptime curr_time)
 {
   for (auto i = user_own_events.begin (); i != user_own_events.end (); i++)
     {
-      if (*i->get_date_time () < curr_time)
+      if ((*i)->get_date_time () < curr_time)
         user_own_events.erase (i);
       else
         return;
@@ -67,6 +67,6 @@ std::vector<std::string> user_t::get_all_own_events_in_strings ()
 {
   std::vector <std::string> ret;
   for (auto &i: user_own_events)
-    ret.push_back (i.event_to_string);
+    ret.push_back (i->event_to_string ());
   return ret;
 }
