@@ -37,6 +37,13 @@ event_t &event_t::operator= (const event_t &rhs)
   return *this;
 }
 
+bool event_t::operator== (const event_t &rhs)
+{
+  return name == rhs.name &&
+         event_date_time == rhs.event_date_time &&
+         etype == rhs.etype;
+}
+
 const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
 {
   return event_date_time.date ().day_of_week ();

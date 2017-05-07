@@ -29,6 +29,7 @@ class event_t
     ~event_t ();
     event_t (const event_t &rhs);
     event_t &operator= (const event_t &rhs);
+    bool operator== (const event_t &rhs);
 
     // getters
     const boost::gregorian::date get_date () const {return event_date_time.date ();}
