@@ -44,6 +44,16 @@ bool event_t::operator== (const event_t &rhs)
          etype == rhs.etype;
 }
 
+bool event_t::operator< (const event_t &rhs)
+{
+  return event_date_time < rhs.event_date_time;
+}
+
+bool event_t::operator> (const event_t &rhs)
+{
+  return event_date_time > rhs.event_date_time;
+}
+
 const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
 {
   return event_date_time.date ().day_of_week ();
