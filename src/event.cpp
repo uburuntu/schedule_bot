@@ -123,6 +123,49 @@ int event_t::rewrite_default_note (std::string &new_default_note)
   return 0;
 }
 
+inline std::string type_to_string (event_t::event_type type)
+{
+  printf ("Event type: ");
+  std::string ret;
+  switch (type)
+    {
+    case (event_t::lecture):
+      ret = "Lecture";
+      break;
+    case (event_t::seminar):
+      ret = "Seminar";
+      break;
+    case (event_t::spec_lecture):
+      ret = "Spec Lec";
+      break;
+    case (event_t::spec_seminar):
+      ret = "Spec Seminar";
+      break;
+    case (event_t::other):
+      ret = "Other";
+      break;
+    default:
+      ret = "Unknown";
+    }
+}
+
+std::string event_t::event_to_string ()
+{
+  std::string ret = name + "\n";
+  ret += pt::to_simple_string (event_date_time) + "\n";
+  ret += type_to_string (etype) + "\n";
+  if (!notify_vector.empty ())
+    {
+      ret += "Notifies\n";
+      for (auto &i: notify_vector)
+        ret += pt::to_simple_string (i) + "\n";
+    }
+  if (!default_note.empty ())
+    ret += "Note:\n" + default_note + "\n";
+  if (!user_note.empty ())
+    ret += "User's note:\n" + user_note + "\n";
+}
+
 bool event_t::is_empty () // maybe not neccecary
 {
   return event_date_time == pt::not_a_date_time

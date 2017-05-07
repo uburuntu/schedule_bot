@@ -36,6 +36,7 @@ class event_t
     // getters
     const boost::gregorian::date get_date () const {return event_date_time.date ();}
     const pt::time_duration get_time () const {return event_date_time.time_of_day ();}
+    const pt::ptime get_date_time () const {return event_date_time;}
     const boost::gregorian::date::day_of_week_type get_weekday() const;
     const std::string &get_name () const {return name;}
     const std::vector<pt::ptime> &get_notify () const {return notify_vector;}
@@ -56,6 +57,8 @@ class event_t
     int add_notify(pt::ptime new_notify);
     void remove_notify (pt::ptime notify_to_remove);
     void clear_notify () {notify_vector.clear ();}
+
+    std::string event_to_string ();
 
     bool is_empty(); // maybe not neccecary
 
