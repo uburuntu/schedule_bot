@@ -101,8 +101,8 @@ void sch_bot::init_commands ()
 void sch_bot::init_users ()
 {
   // Developer's id as admins
-  add_admin (sbot::r_id);
-  add_admin (sbot::a_id);
+//  add_admin (sbot::r_id);
+//  add_admin (sbot::a_id);
   add_admin (sbot::v_id);
 
   send_message_admins ("Bot started, current version: " + sbot::version + ".\nBuild time: " + sbot::build_date + " " + sbot::build_time);
@@ -185,9 +185,9 @@ void sch_bot::notify_user (user_t &user)
 
   user.last_notify = time;
 
-  std::string message = sbot::program + " every 5 minute notifiyng test.\nCurrent time: " + pt::to_simple_string (time)
-                        + sbot::empty_line
-                        + StringTools::generateRandomString (16);
+//  std::string message = sbot::program + " every 5 minute notifiyng test.\nCurrent time: " + pt::to_simple_string (time)
+//                        + sbot::empty_line
+//                        + StringTools::generateRandomString (16);
 
-  send_message (user.get_id (), message);
+//  send_message (user.get_id (), message);
 }
