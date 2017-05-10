@@ -28,19 +28,13 @@ class sch_bot : public TgBot::Bot
     // Send message to specific id
     void send_message (user_id id, const std::string &text) const;
     // Send message to all users
-    void send_message_all (const std::string &text) const;
+    void send_message_all (const std::string &text);
     // Send message to all admins
-    void send_message_admins (const std::string &text) const;
+    void send_message_admins (const std::string &text);
 
     // Notify methods
     void notify_all ();
     void notify_user (user_t &user);
-
-    // Users methods
-    void add_user (user_id id);
-    void add_admin (user_id id);
-    bool user_exist (user_id id) const;
-    bool is_admin (user_id id) const;
 
     report_system &rep = report_system::instance ();
 
@@ -56,8 +50,7 @@ class sch_bot : public TgBot::Bot
     sch_bot (const sch_bot &) = delete;
     sch_bot operator= (const sch_bot &) = delete;
 
-    std::map<user_id, user_t> users;
-    std::set<user_id> admins;
+    users_t users;
 };
 
 #endif // SCH_BOT_H

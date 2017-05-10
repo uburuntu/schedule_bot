@@ -70,3 +70,27 @@ std::vector<std::string> user_t::get_all_own_events_in_strings ()
     ret.push_back (i->event_to_string ());
   return ret;
 }
+
+void users_t::add_user (user_id id)
+{
+  if (!user_exist (id))
+    {
+      users.emplace (id, id);
+    }
+}
+
+void users_t::add_admin (user_id id)
+{
+  add_user (id);
+  admins.insert (id);
+}
+
+bool users_t::user_exist (user_id id) const
+{
+  return users.find (id) != users.end ();
+}
+
+bool users_t::is_admin (user_id id) const
+{
+  return admins.find (id) != admins.end ();
+}

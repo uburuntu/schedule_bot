@@ -12,7 +12,7 @@ void sch_bot::init_commands ()
   auto start_handle = [this] (TgBot::Message::Ptr message_in)
   {
     user_id id = message_in->chat->id;
-    add_user (id);
+    users.add_user (id);
 
     std::string start_answer = "Привет, красавчик! Ты попал к лучшему боту в Телеграме."
                                + sbot::empty_line
@@ -32,16 +32,16 @@ void sch_bot::init_commands ()
 
   auto debug_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    if (!is_admin (message_in->chat->id))
+    if (!users.is_admin (message_in->chat->id))
       return;
 
-    users[message_in->chat->id].switch_debug ();
+    users.get_all_users ()[message_in->chat->id].switch_debug ();
     send_message (message_in, "Debug mode enabled. You will be notified about some serious shit.");
   };
 
   auto kill_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    if (!is_admin (message_in->chat->id))
+    if (!users.is_admin (message_in->chat->id))
       return;
 
     static int kill_count = 0;
@@ -101,37 +101,13 @@ void sch_bot::init_commands ()
 void sch_bot::init_users ()
 {
   // Developer's id as admins
-  add_admin (sbot::r_id);
-  add_admin (sbot::a_id);
-  add_admin (sbot::v_id);
+  users.add_admin (sbot::r_id);
+  users.add_admin (sbot::a_id);
+  users.add_admin (sbot::v_id);
 
   send_message_admins ("Bot started, current version: " + sbot::version + ".\nBuild time: " + sbot::build_date + " " + sbot::build_time);
 
   // TODO: implement users import / export
-}
-
-void sch_bot::add_user (user_id id)
-{
-  if (!user_exist (id))
-    {
-      users.emplace (id, id);
-    }
-}
-
-void sch_bot::add_admin (user_id id)
-{
-  add_user (id);
-  admins.insert (id);
-}
-
-bool sch_bot::user_exist (user_id id) const
-{
-  return users.find (id) != users.end ();
-}
-
-bool sch_bot::is_admin (user_id id) const
-{
-  return admins.find (id) != admins.end ();
 }
 
 void sch_bot::send_message (user_id id, const std::string &text) const
@@ -146,18 +122,18 @@ void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string
   send_message (message->chat->id, text);
 }
 
-void sch_bot::send_message_all (const std::string &text) const
+void sch_bot::send_message_all (const std::string &text)
 {
-  for (auto &user_it : users)
+  for (auto &user_it : users.get_all_users ())
     {
       user_id id = user_it.second.get_id ();
       send_message (id, "[Global Message]" + sbot::empty_line + text);
     }
 }
 
-void sch_bot::send_message_admins (const std::string &text) const
+void sch_bot::send_message_admins (const std::string &text)
 {
-  for (auto &user_it : admins)
+  for (auto &user_it : users.get_admins ())
     {
       user_id id = user_it;
       send_message (id, "[Admin Report]" + sbot::empty_line + text);
@@ -167,7 +143,7 @@ void sch_bot::send_message_admins (const std::string &text) const
 void sch_bot::notify_all ()
 {
   // TODO: refactor with a notify-queue container to prevent useless work
-  for (auto &user_it : users)
+  for (auto &user_it : users.get_all_users ())
     {
       notify_user (user_it.second);
     }

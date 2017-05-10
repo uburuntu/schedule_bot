@@ -3,6 +3,9 @@
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+#include <set>
+#include <map>
+
 #include "defaults.h"
 #include "utils.h"
 class event_t;
@@ -37,6 +40,25 @@ class user_t
     bool debug_mode = false;
     user_id id = 0;
     std::vector <std::unique_ptr <event_t>> user_own_events;
+};
+
+class users_t
+{
+  public:
+    void add_user (user_id id);
+    void add_admin (user_id id);
+
+    bool user_exist (user_id id) const;
+    bool is_admin (user_id id) const;
+
+    // TODO: Refactor to const and implement users functions
+    std::map<user_id, user_t> &get_all_users () { return users;}
+    std::set<user_id> &get_admins () { return admins;}
+
+  private:
+    // TODO: Refactor containers
+    std::map<user_id, user_t> users;
+    std::set<user_id> admins;
 };
 
 #endif // USER_H
