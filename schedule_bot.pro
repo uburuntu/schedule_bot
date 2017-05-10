@@ -7,9 +7,7 @@ QT -= gui core
 CONFIG += debug_and_release
 CONFIG += console
 CONFIG -= qml_debug
-CONFIG(release, debug|release) {
-    CONFIG += optimize_full
-}
+
 QMAKE_LFLAGS_RELEASE -= -Wl,-O1
 
 QMAKE_CXXFLAGS += -std=c++1y -W -Wall -Wcast-align -pedantic -fstack-protector-all \
@@ -27,6 +25,7 @@ CONFIG(debug, debug|release) {
 } else {
     DESTDIR = build
     DEFINES += BOT_RELEASE_EDITION=1
+    CONFIG += optimize_full
 }
 
 OBJECTS_DIR = $$DESTDIR/obj
