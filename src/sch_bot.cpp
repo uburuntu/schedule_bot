@@ -76,7 +76,7 @@ void sch_bot::init_commands ()
 
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
-    rep->print (rep::message_in, "User (name = %s, id = %ld) wrote '%s'",
+    rep.print (rep::message_in, "User (name = %s, id = %ld) wrote '%s'",
                                  message_in->chat->username.c_str (),
                                  message_in->chat->id,
                                  message_in->text.c_str());
@@ -136,7 +136,7 @@ bool sch_bot::is_admin (user_id id) const
 
 void sch_bot::send_message (user_id id, const std::string &text) const
 {
-  rep->print (rep::message_out, "[To id = %ld] \n\"\n%s\n\"", id, text.c_str ());
+  rep.print (rep::message_out, "[To id = %ld] \n\"\n%s\n\"", id, text.c_str ());
 
   getApi ().sendMessage (id, text);
 }

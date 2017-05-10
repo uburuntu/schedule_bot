@@ -23,4 +23,11 @@ namespace sbot
   }
 }
 
+#define SINGLETON_CLASS(CLASS)            \
+  static CLASS &instance ()         \
+  {                                       \
+    static CLASS singletone_instance;     \
+    return singletone_instance;           \
+  }
+
 #endif // UTILS_H

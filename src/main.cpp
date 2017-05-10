@@ -29,7 +29,6 @@
 
 #include "report_system.h"
 #include "sch_bot.h"
-#include "token.h"
 
 volatile sig_atomic_t signal_got = 0;
 
@@ -39,12 +38,12 @@ int main (int /* argc */, char *argv[])
   signal (SIGINT, [] (int s) { printf ("[CRITICAL] Program got SIGINT signal, aborting...\n"); signal_got = s;});
 
   // Create report system
-  rep_ptr rep = std::make_shared<report_system> ();
-  rep->print (rep::info, "The program '%s' started work", argv[0]);
-  rep->print (rep::info, "Build time: %s %s", sbot::build_date.c_str (), sbot::build_time.c_str ());
+  report_system &rep = report_system::instance ();
+  rep.print (rep::info, "The program '%s' started work", argv[0]);
+  rep.print (rep::info, "Build time: %s %s", sbot::build_date.c_str (), sbot::build_time.c_str ());
 
   // Create and initialize bot
-  sch_bot bot (API_TOKEN, rep);
+  sch_bot &bot = sch_bot::instance ();
 
   // Run loop to handle messages
   while (1)
@@ -53,7 +52,7 @@ int main (int /* argc */, char *argv[])
         {
           TgBot::TgLongPoll long_poll (bot);
 
-          rep->print (rep::info, "Long poll started");
+          rep.print (rep::info, "Long poll started");
           while (1)
             {
               long_poll.start ();
@@ -65,7 +64,7 @@ int main (int /* argc */, char *argv[])
         }
       catch (std::exception &e)
         {
-          rep->print (rep::error, "Exception: %s", e.what ());
+          rep.print (rep::error, "Exception: %s", e.what ());
         }
     }
 

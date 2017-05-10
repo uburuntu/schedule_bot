@@ -10,19 +10,14 @@
 #include "defaults.h"
 #include "event.h"
 #include "report_system.h"
+#include "token.h"
 #include "user.h"
+#include "utils.h"
 
 class sch_bot : public TgBot::Bot
 {
   public:
-    sch_bot (const std::string &token, rep_ptr rep) : TgBot::Bot (token), rep (rep)
-    {
-      rep->print (rep::info, "Bot id: %d", getApi ().getMe ()->id);
-      rep->print (rep::info, "Bot username: %s", getApi ().getMe ()->username.c_str ());
-
-      init_users ();
-      init_commands ();
-    }
+    SINGLETON_CLASS (sch_bot);
 
     // Initialize functions
     void init_commands ();
@@ -47,9 +42,20 @@ class sch_bot : public TgBot::Bot
     bool user_exist (user_id id) const;
     bool is_admin (user_id id) const;
 
-    rep_ptr rep;
+    report_system &rep = report_system::instance ();
 
   private:
+    sch_bot () : TgBot::Bot (API_TOKEN)
+    {
+      rep.print (rep::info, "Bot id: %d", getApi ().getMe ()->id);
+      rep.print (rep::info, "Bot username: %s", getApi ().getMe ()->username.c_str ());
+
+      init_users ();
+      init_commands ();
+    }
+    sch_bot (const sch_bot &) = delete;
+    sch_bot operator= (const sch_bot &) = delete;
+
     std::map<user_id, user_t> users;
     std::set<user_id> admins;
 };

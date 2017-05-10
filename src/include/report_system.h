@@ -10,25 +10,7 @@
 class report_system
 {
   public:
-    report_system ()
-    {
-      mkdir (sbot::prefix_dir.c_str (), S_IRWXU | S_IRWXG | S_IRWXO);
-
-      for (int type = (int) info; type < (int) count; type++)
-        {
-          // TODO: realize checks
-          log_files[type].open (sbot::prefix_dir + enum_to_string ((log_type) type) + ".log", std::ios_base::out | std::ios_base::app);
-        }
-    }
-    ~report_system ()
-    {
-      std::string time = pt::to_simple_string (sbot::curr_time ());
-      for (int type = (int) info; type < (int) count; type++)
-        {
-          log_files[type] << "[END] [" + time + "] Total " << enum_to_string ((log_type) type) << ": " << log_count[type] << sbot::empty_line;
-          log_files[type].close ();
-        }
-    }
+    SINGLETON_CLASS (report_system);
 
     enum log_type
     {
@@ -49,6 +31,29 @@ class report_system
     static const char *enum_to_string (const log_type &type);
 
   private:
+    report_system ()
+    {
+      mkdir (sbot::prefix_dir.c_str (), S_IRWXU | S_IRWXG | S_IRWXO);
+
+      for (int type = (int) info; type < (int) count; type++)
+        {
+          // TODO: realize checks
+          log_files[type].open (sbot::prefix_dir + enum_to_string ((log_type) type) + ".log", std::ios_base::out | std::ios_base::app);
+        }
+    }
+    report_system (const report_system &) = delete;
+    report_system operator= (const report_system &) = delete;
+
+    ~report_system ()
+    {
+      std::string time = pt::to_simple_string (sbot::curr_time ());
+      for (int type = (int) info; type < (int) count; type++)
+        {
+          log_files[type] << "[END] [" + time + "] Total " << enum_to_string ((log_type) type) << ": " << log_count[type] << sbot::empty_line;
+          log_files[type].close ();
+        }
+    }
+
     char buf[sbot::buf_size] = {};
 
     long long int log_count[log_type::count] = {};
