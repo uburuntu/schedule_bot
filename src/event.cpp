@@ -17,9 +17,9 @@ event_t::~event_t ()
 
 //should be copying everywhere
 event_t::event_t (const event_t &rhs)
-    : event_date_time (rhs.event_date_time), name (rhs.name),
-      etype (rhs.etype), notify_vector (rhs.notify_vector),
-      place (rhs.place), default_note (rhs.default_note), user_note (rhs.user_note)
+  : event_date_time (rhs.event_date_time), name (rhs.name),
+    etype (rhs.etype), notify_vector (rhs.notify_vector),
+    place (rhs.place), default_note (rhs.default_note), user_note (rhs.user_note)
 {
 
 }
@@ -61,13 +61,13 @@ const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
 
 int event_t::add_notify (pt::ptime new_notify)
 {
-  auto right_edge = new_notify + boost::posix_time::minutes(1);
-  auto left_edge = new_notify - boost::posix_time::minutes(1);
+  auto right_edge = new_notify + boost::posix_time::minutes (1);
+  auto left_edge = new_notify - boost::posix_time::minutes (1);
   if (!notify_vector.empty ())
     {
       for (auto i = notify_vector.begin (); i != notify_vector.end (); i++)
         {
-          if (left_edge < *i && *i < right_edge)  // This one alreade exists
+          if (left_edge < *i && *i < right_edge)  // This one already exists
             return -1;
           if (new_notify < *i)
             {
@@ -76,7 +76,12 @@ int event_t::add_notify (pt::ptime new_notify)
             }
         }
     }
-  notify_vector.push_back (new_notify);
+  else
+    {
+      notify_vector.push_back (new_notify);
+      return 0;
+    }
+  return -1;
 }
 
 void event_t::remove_notify (pt::ptime notify_to_remove)
@@ -87,6 +92,32 @@ void event_t::remove_notify (pt::ptime notify_to_remove)
         notify_vector.erase (i);  // Enough to remove only one because
         return;                   // there can not be more, see add_notify
       }
+}
+
+const char *event_t::enum_to_string (const event_t::event_type &type)
+{
+  switch (type)
+    {
+      case lecture:
+        return "Lecture";
+
+      case seminar:
+        return "Seminar";
+
+      case spec_lecture:
+        return "Special Lecture";
+
+      case spec_seminar:
+        return "Special Seminar";
+
+      case other:
+        return "Other";
+
+      case COUNT:
+        {}
+    }
+
+  return "INVALID";
 }
 
 int event_t::add_user_note (std::string &added_user_note)
@@ -123,47 +154,24 @@ int event_t::rewrite_default_note (std::string &new_default_note)
   return 0;
 }
 
-inline std::string type_to_string (event_t::event_type type)
-{
-  printf ("Event type: ");
-  std::string ret;
-  switch (type)
-    {
-    case (event_t::lecture):
-      ret = "Lecture";
-      break;
-    case (event_t::seminar):
-      ret = "Seminar";
-      break;
-    case (event_t::spec_lecture):
-      ret = "Spec Lec";
-      break;
-    case (event_t::spec_seminar):
-      ret = "Spec Seminar";
-      break;
-    case (event_t::other):
-      ret = "Other";
-      break;
-    default:
-      ret = "Unknown";
-    }
-}
-
 std::string event_t::event_to_string ()
 {
-  std::string ret = name + "\n";
-  ret += pt::to_simple_string (event_date_time) + "\n";
-  ret += type_to_string (etype) + "\n";
+  static const std::string endl = "\n";
+  std::string ret = name + endl;
+  ret += pt::to_simple_string (event_date_time) + endl;
+  ret += enum_to_string (etype) + endl;
   if (!notify_vector.empty ())
     {
       ret += "Notifies\n";
-      for (auto &i: notify_vector)
-        ret += pt::to_simple_string (i) + "\n";
+      for (auto &i : notify_vector)
+        ret += pt::to_simple_string (i) + endl;
     }
   if (!default_note.empty ())
-    ret += "Note:\n" + default_note + "\n";
+    ret += "Note:\n" + default_note + endl;
   if (!user_note.empty ())
-    ret += "User's note:\n" + user_note + "\n";
+    ret += "User's note:\n" + user_note + endl;
+
+  return ret;
 }
 
 bool event_t::is_empty () // maybe not neccecary
@@ -176,33 +184,11 @@ bool event_t::is_empty () // maybe not neccecary
          && default_note.empty ();
 }
 
-
-
 /// FUNCTIONS BELOW ARE DEBUG FUNCTIONS AND RECOMMENDED TO BE DELETED FOR RELEASE !!!
 #ifdef BOT_DEBUG_EDITION
 inline void print_type (event_t::event_type type)
 {
-  printf ("Event type: ");
-  switch (type)
-    {
-    case (event_t::lecture):
-      printf ("Lecture\n");
-      break;
-    case (event_t::seminar):
-      printf ("Seminar\n");
-      break;
-    case (event_t::spec_lecture):
-      printf ("Spec Lec\n");
-      break;
-    case (event_t::spec_seminar):
-      printf ("Spec Sem\n");
-      break;
-    case (event_t::other):
-      printf ("Other\n");
-      break;
-    default:
-      printf ("Unknown\n");
-    }
+  printf ("Event type: %s\n", event_t::enum_to_string (type));
 }
 
 void event_t::print_event () // That is temorary debug function
@@ -212,7 +198,7 @@ void event_t::print_event () // That is temorary debug function
   printf ("Event date and time: %s\n", boost::posix_time::to_iso_extended_string (event_date_time).data());
   printf ("Event place: %s\n", place.data ());
   printf ("Notifies:\n");
-  for (auto i: notify_vector)
+  for (auto i : notify_vector)
     printf ("  Notify: %s\n", boost::posix_time::to_iso_extended_string (i).data());
   print_type (etype);
   printf ("User note :\n  %s\n", user_note.data ());
@@ -222,21 +208,21 @@ void event_t::print_event () // That is temorary debug function
 
 void event_test_function ()
 {
-  std::string ts("2002-01-20 23:59:59.000");
+  std::string ts ("2002-01-20 23:59:59.000");
   std::string name_1 ("event_name_1");
   std::string name_2 ("event_name_2");
   auto pt_1 = boost::posix_time::time_from_string (ts);
-  boost::posix_time::ptime pt_2 (boost::gregorian::date(2010, boost::gregorian::Apr, 10),
-                                 boost::posix_time::hours(14) + boost::posix_time::minutes(15));
+  boost::posix_time::ptime pt_2 (boost::gregorian::date (2010, boost::gregorian::Apr, 10),
+                                 boost::posix_time::hours (14) + boost::posix_time::minutes (15));
   event_t event_1 (pt_1, name_1, event_t::lecture);
   event_t event_2 (pt_2, name_2, event_t::seminar);
 
 
-  std::string tsn1("2001-01-20 23:59:59.000");
+  std::string tsn1 ("2001-01-20 23:59:59.000");
   auto ptn_1 = boost::posix_time::time_from_string (tsn1);
-  std::string tsn2("2001-04-20 13:02:11.000");
+  std::string tsn2 ("2001-04-20 13:02:11.000");
   auto ptn_2 = boost::posix_time::time_from_string (tsn2);
-  std::string tsn3("2001-03-20 20:59:59.000");
+  std::string tsn3 ("2001-03-20 20:59:59.000");
   auto ptn_3 = boost::posix_time::time_from_string (tsn3);
   event_1.add_notify (ptn_2);
   event_1.print_event ();

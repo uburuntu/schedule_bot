@@ -54,17 +54,18 @@ class event_t
     int rewrite_default_note (std::string &new_default_note);
     void clear_user_note () {user_note.clear ();}
     void clear_default_note () {default_note.clear ();}
-    int add_notify(pt::ptime new_notify);
+    int add_notify (pt::ptime new_notify);
     void remove_notify (pt::ptime notify_to_remove);
     void clear_notify () {notify_vector.clear ();}
 
+    static const char *enum_to_string (const event_type &type);
     std::string event_to_string ();
 
     bool is_empty(); // maybe not neccecary
 
-#ifdef BOT_DEBUG_EDITION
+    #ifdef BOT_DEBUG_EDITION
     void print_event (); /// THAT IS TEMPORARY DEBUG FUNCTION
-#endif
+    #endif
 
   private:
     pt::ptime event_date_time;
@@ -77,7 +78,7 @@ class event_t
 };
 
 #ifdef BOT_DEBUG_EDITION
-void event_test_function (); /// DEBUG FUNCTION
+  void event_test_function (); /// DEBUG FUNCTION
 #endif
 
 #endif // EVENT_H
