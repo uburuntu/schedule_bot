@@ -16,18 +16,6 @@ int user_t::add_own_event (event_t new_own_event)
   return -2;
 }
 
-int user_t::add_notify_to_own_event (pt::ptime new_own_notify, event_t event)
-{
-  for (auto &i: user_own_events)
-    {
-      if (*i == event)
-        {
-          return i->add_notify (new_own_notify);
-        }
-    }
-  return -2; // There is no such event
-}
-
 void user_t::remove_own_event (event_t own_event_to_remove)
 {
   for (auto i = user_own_events.begin (); i != user_own_events.end (); i++)
@@ -40,24 +28,22 @@ void user_t::remove_own_event (event_t own_event_to_remove)
     }
 }
 
-void user_t::remove_notify_from_event (pt::ptime notify_to_remove,  event_t event)
-{
-  for (auto &i: user_own_events)
-    {
-      if (*i == event)
-        {
-          i->remove_notify (notify_to_remove);
-          return;
-        }
-    }
-}
-
 void user_t::remove_past_events (pt::ptime curr_time)
 {
-  for (auto i = user_own_events.begin (); i != user_own_events.end (); i++)
+  for (auto i = user_own_events.begin (); i != user_own_events.end (); )
     {
       if ((*i)->get_date_time () < curr_time)
-        user_own_events.erase (i);
+        {
+          if ((*i)->is_repeatable ())
+            {
+              (*i)->repeat_event ();
+              event_t tmp_event = **i;
+              i = user_own_events.erase (i); // TODO: check if there are no problems with iterators
+              add_own_event (tmp_event);
+            }
+          else
+            i = user_own_events.erase (i);
+        }
       else
         return;
     }

@@ -39,13 +39,14 @@ class event_t
     const pt::ptime get_date_time () const {return event_date_time;}
     const boost::gregorian::date::day_of_week_type get_weekday() const;
     const std::string &get_name () const {return name;}
-    const std::vector<pt::ptime> &get_notify () const {return notify_vector;}
     const std::string &get_default_note () const {return default_note;}
     const std::string &get_user_note () const {return user_note;}
+    const bool &is_repeatable () const {return repeatable;}
 
     // setters
     void change_type (event_type new_etype) {etype = new_etype;}
     void set_place (std::string &new_place) {place = std::move (new_place);}
+    void set_repeat_interval (pt::time_duration repeat_interval_arg) {repeat_interval = repeat_interval_arg;}
 
     // other
     int add_user_note (std::string &added_user_note);
@@ -56,7 +57,9 @@ class event_t
     void clear_default_note () {default_note.clear ();}
     int add_notify (pt::ptime new_notify);
     void remove_notify (pt::ptime notify_to_remove);
-    void clear_notify () {notify_vector.clear ();}
+    void repeat_event () {if (repeatable) event_date_time += repeat_interval;}
+    void make_repeatable (pt::time_duration repeat_interval_arg) {set_repeat_interval (repeat_interval_arg); repeatable = true;}
+    int switch_repeatability ();
 
     static const char *enum_to_string (const event_type &type);
     std::string event_to_string ();
@@ -71,10 +74,11 @@ class event_t
     pt::ptime event_date_time;
     std::string name;
     event_type etype;
-    std::vector<pt::ptime> notify_vector;
     std::string place;
     std::string default_note;
     std::string user_note;
+    bool repeatable = false;
+    pt::time_duration repeat_interval = pt::not_a_date_time;
 };
 
 #ifdef BOT_DEBUG_EDITION

@@ -10,7 +10,6 @@ event_t::~event_t ()
 {
   event_date_time = pt::not_a_date_time;
   name.clear ();
-  notify_vector.clear ();
   default_note.clear ();
   user_note.clear ();
 }
@@ -18,8 +17,8 @@ event_t::~event_t ()
 //should be copying everywhere
 event_t::event_t (const event_t &rhs)
   : event_date_time (rhs.event_date_time), name (rhs.name),
-    etype (rhs.etype), notify_vector (rhs.notify_vector),
-    place (rhs.place), default_note (rhs.default_note), user_note (rhs.user_note)
+    etype (rhs.etype), place (rhs.place),
+    default_note (rhs.default_note), user_note (rhs.user_note)
 {
 
 }
@@ -30,7 +29,6 @@ event_t &event_t::operator= (const event_t &rhs)
   event_date_time = rhs.event_date_time;
   name = rhs.name;
   etype = rhs.etype;
-  notify_vector = rhs.notify_vector;
   place = rhs.place;
   default_note = rhs.default_note;
   user_note = rhs.user_note;
@@ -57,41 +55,6 @@ bool event_t::operator> (const event_t &rhs)
 const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
 {
   return event_date_time.date ().day_of_week ();
-}
-
-int event_t::add_notify (pt::ptime new_notify)
-{
-  auto right_edge = new_notify + boost::posix_time::minutes (1);
-  auto left_edge = new_notify - boost::posix_time::minutes (1);
-  if (!notify_vector.empty ())
-    {
-      for (auto i = notify_vector.begin (); i != notify_vector.end (); i++)
-        {
-          if (left_edge < *i && *i < right_edge)  // This one already exists
-            return -1;
-          if (new_notify < *i)
-            {
-              notify_vector.insert (i, new_notify);
-              return 0;
-            }
-        }
-    }
-  else
-    {
-      notify_vector.push_back (new_notify);
-      return 0;
-    }
-  return -1;
-}
-
-void event_t::remove_notify (pt::ptime notify_to_remove)
-{
-  for (auto i = notify_vector.begin (); i != notify_vector.end (); i++)
-    if (*i == notify_to_remove)
-      {
-        notify_vector.erase (i);  // Enough to remove only one because
-        return;                   // there can not be more, see add_notify
-      }
 }
 
 const char *event_t::enum_to_string (const event_t::event_type &type)
@@ -160,12 +123,6 @@ std::string event_t::event_to_string ()
   std::string ret = name + endl;
   ret += pt::to_simple_string (event_date_time) + endl;
   ret += enum_to_string (etype) + endl;
-  if (!notify_vector.empty ())
-    {
-      ret += "Notifies\n";
-      for (auto &i : notify_vector)
-        ret += pt::to_simple_string (i) + endl;
-    }
   if (!default_note.empty ())
     ret += "Note:\n" + default_note + endl;
   if (!user_note.empty ())
@@ -174,10 +131,17 @@ std::string event_t::event_to_string ()
   return ret;
 }
 
+int event_t::switch_repeatability ()
+{
+  if (repeat_interval == pt::not_a_date_time)
+    return -1;
+  repeatable = !repeatable;
+  return 0;
+}
+
 bool event_t::is_empty () // maybe not neccecary
 {
   return event_date_time == pt::not_a_date_time
-         && notify_vector.empty ()
          && place.empty ()
          && name.empty ()
          && user_note.empty ()
