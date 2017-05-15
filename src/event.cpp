@@ -144,6 +144,7 @@ int event_t::make_repeatable (pt::time_duration repeat_interval_arg)
   if (set_repeat_interval (repeat_interval_arg) < 0)
     return -1;
   repeatable = true;
+  return 0;
 }
 
 int event_t::switch_repeatability ()

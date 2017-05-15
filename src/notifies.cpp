@@ -118,7 +118,7 @@ int notifies_t::add_notify (notify_t new_notify)
   auto new_notify_time = new_notify.get_notify_time ();
 
   if ((new_notify_time > notifying_event_time && !event_is_repeatable) ||
-      event_is_repeatable && new_notify_time > notifying_event_time + new_notifying_event->get_repeat_interval ())
+      (event_is_repeatable && new_notify_time > notifying_event_time + new_notifying_event->get_repeat_interval ()))
     return -1;
 
   notify_t this_time_notifies_left_bound (new_notify.get_user_id (),
