@@ -142,28 +142,33 @@ void sch_bot::send_message_admins (const std::string &text)
 
 void sch_bot::notify_all ()
 {
-  // TODO: refactor with a notify-queue container to prevent useless work
-  for (auto &user_it : users.get_all_users ())
+  pt::ptime time = sbot::curr_time ();
+  for (auto &notify_it : notifies.get_all_notifies ())
     {
-      notify_user (user_it.second);
+      if (notify_it > time)
+        break;
+      notify_user (notify_it);
     }
+
+  for (auto &i: users.get_all_users ())
+    {
+      user_id id;
+      user_t user;
+      std::tie (id, user) = i;
+      user.remove_past_events (time);
+    }
+
+  notifies.remove_past_notifies (time);
 }
 
-void sch_bot::notify_user (user_t &user)
+void sch_bot::notify_user (const notify_t &notify)
 {
   // TODO: implement user events getter and notifying
   pt::ptime time = sbot::curr_time ();
 
-  pt::time_duration from_last_notify = time - user.last_notify;
-
-  if (from_last_notify.total_seconds () < 300)
-    return;
-
-  user.last_notify = time;
-
-  std::string message = sbot::program + " every 5 minute notifiyng test.\nCurrent time: " + pt::to_simple_string (time)
+  std::string message = sbot::program + "notify.\nCurrent time: " + pt::to_simple_string (time)
                         + sbot::empty_line
-                        + StringTools::generateRandomString (16);
+                        + notify.get_notifying_event ()->event_to_string ();
 
-  send_message (user.get_id (), message);
+  send_message (notify.get_user_id (), message);
 }

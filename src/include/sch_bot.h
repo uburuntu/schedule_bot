@@ -13,6 +13,7 @@
 #include "token.h"
 #include "user.h"
 #include "utils.h"
+#include "notifies.h"
 
 class sch_bot : public TgBot::Bot
 {
@@ -34,9 +35,10 @@ class sch_bot : public TgBot::Bot
 
     // Notify methods
     void notify_all ();
-    void notify_user (user_t &user);
+    void notify_user (const notify_t &notify);
 
     report_system &rep = report_system::instance ();
+    notifies_t &notifies = notifies_t::instance ();
 
   private:
     sch_bot () : TgBot::Bot (API_TOKEN)

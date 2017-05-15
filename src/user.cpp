@@ -1,5 +1,6 @@
 #include "user.h"
 #include "event.h"
+#include "notifies.h"
 
 int user_t::add_own_event (event_t new_own_event)
 {
@@ -22,6 +23,9 @@ void user_t::remove_own_event (event_t own_event_to_remove)
     {
       if (**i == own_event_to_remove)
         {
+          auto ptr_to_event = find_event (own_event_to_remove);
+          if (ptr_to_event)
+            notifies_t::instance ().remove_user_event_notifies (id, ptr_to_event);
           user_own_events.erase (i);
           return;
         }
@@ -32,21 +36,28 @@ void user_t::remove_past_events (pt::ptime curr_time)
 {
   for (auto i = user_own_events.begin (); i != user_own_events.end (); )
     {
-      if ((*i)->get_date_time () < curr_time)
+      auto &curr_event = *i;
+      if (curr_event->get_date_time () > curr_time)
+        return;
+
+      if (curr_event->is_repeatable ())
         {
-          if ((*i)->is_repeatable ())
-            {
-              (*i)->repeat_event ();
-              event_t tmp_event = **i;
-              i = user_own_events.erase (i); // TODO: check if there are no problems with iterators
-              add_own_event (tmp_event);
-            }
-          else
-            i = user_own_events.erase (i);
+          curr_event->repeat_event ();
+          event_t tmp_event = *curr_event;
+          add_own_event (tmp_event);
         }
       else
-        return;
+        notifies_t::instance ().remove_user_event_notifies (id, *i);
+      i = user_own_events.erase (i); // TODO: check if there are no problems with iterators
     }
+}
+
+std::shared_ptr<event_t> user_t::find_event (event_t event)
+{
+  for (auto &i: user_own_events)
+    if (*i == event)
+      return i;
+  return nullptr;
 }
 
 std::vector<std::string> user_t::get_all_own_events_in_strings ()

@@ -32,6 +32,7 @@ class user_t
     int add_own_event (event_t new_own_event);
     void remove_own_event (event_t own_event_to_remove);
     void remove_past_events (pt::ptime curr_time);
+    std::shared_ptr<event_t> find_event(event_t event);
 
     std::vector<std::string> get_all_own_events_in_strings ();
 

@@ -57,6 +57,14 @@ const boost::gregorian::date::day_of_week_type event_t::get_weekday () const
   return event_date_time.date ().day_of_week ();
 }
 
+int event_t::set_repeat_interval (pt::time_duration repeat_interval_arg)
+{
+  if (repeat_interval_arg < pt::minutes (1))
+    return -1;
+  repeat_interval = repeat_interval_arg;
+  return 0;
+}
+
 const char *event_t::enum_to_string (const event_t::event_type &type)
 {
   switch (type)
@@ -129,6 +137,13 @@ std::string event_t::event_to_string ()
     ret += "User's note:\n" + user_note + endl;
 
   return ret;
+}
+
+int event_t::make_repeatable (pt::time_duration repeat_interval_arg)
+{
+  if (set_repeat_interval (repeat_interval_arg) < 0)
+    return -1;
+  repeatable = true;
 }
 
 int event_t::switch_repeatability ()

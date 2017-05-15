@@ -33,6 +33,9 @@ class event_t
     bool operator< (const event_t &rhs);
     bool operator> (const event_t &rhs);
 
+    bool operator< (const pt::ptime &rhs);
+    bool operator> (const pt::ptime &rhs);
+
     // getters
     const boost::gregorian::date get_date () const {return event_date_time.date ();}
     const pt::time_duration get_time () const {return event_date_time.time_of_day ();}
@@ -42,11 +45,12 @@ class event_t
     const std::string &get_default_note () const {return default_note;}
     const std::string &get_user_note () const {return user_note;}
     const bool &is_repeatable () const {return repeatable;}
+    const pt::time_duration get_repeat_interval () const {return repeat_interval;}
 
     // setters
     void change_type (event_type new_etype) {etype = new_etype;}
     void set_place (std::string &new_place) {place = std::move (new_place);}
-    void set_repeat_interval (pt::time_duration repeat_interval_arg) {repeat_interval = repeat_interval_arg;}
+    int set_repeat_interval (pt::time_duration repeat_interval_arg);
 
     // other
     int add_user_note (std::string &added_user_note);
@@ -58,7 +62,7 @@ class event_t
     int add_notify (pt::ptime new_notify);
     void remove_notify (pt::ptime notify_to_remove);
     void repeat_event () {if (repeatable) event_date_time += repeat_interval;}
-    void make_repeatable (pt::time_duration repeat_interval_arg) {set_repeat_interval (repeat_interval_arg); repeatable = true;}
+    int make_repeatable (pt::time_duration repeat_interval_arg);
     int switch_repeatability ();
 
     static const char *enum_to_string (const event_type &type);
