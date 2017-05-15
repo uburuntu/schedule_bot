@@ -18,7 +18,9 @@ set(SOURCES_LIST src/main.cpp
                  src/user.cpp
                  src/event.cpp
                  src/report_system.cpp
-                 src/sch_bot.cpp)
+                 src/sch_bot.cpp
+                 src/schedule.cpp
+                 src/notifies.cpp)
 
 # Headers directories list
 set(HEADERS_DIRS_LIST ./src/include ./config)
