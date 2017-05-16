@@ -1,6 +1,6 @@
 #include "notifies.h"
 
-notify_t::notify_t (const user_id id_arg, pt::ptime notify_time_arg, std::shared_ptr<event_t> notify_event_arg):
+notify_t::notify_t (const user_id id_arg, pt::ptime notify_time_arg, event_ptr notify_event_arg):
   id (id_arg), notify_time (notify_time_arg), notify_event (notify_event_arg)
 {
 
@@ -139,7 +139,7 @@ int notifies_t::add_notify (notify_t new_notify)
   return 0;
 }
 
-int notifies_t::add_notify (user_id &id, pt::ptime notify_time, std::shared_ptr<event_t> notify_event)
+int notifies_t::add_notify (user_id &id, pt::ptime notify_time, event_ptr notify_event)
 {
   return add_notify (notify_t (id, notify_time, notify_event));
 }
@@ -155,7 +155,7 @@ void notifies_t::clear_user_noifies (user_id &id)
     }
 }
 
-int notifies_t::remove_user_one_notify (user_id &id, pt::ptime notify_time, std::shared_ptr<event_t> notify_event)
+int notifies_t::remove_user_one_notify (user_id &id, pt::ptime notify_time, event_ptr notify_event)
 {
   notify_t notify_to_remove (id, notify_time, notify_event);
   auto this_time_notify = std::lower_bound (all_notifies.begin (), all_notifies.end (), notify_to_remove);
@@ -172,7 +172,7 @@ int notifies_t::remove_user_one_notify (user_id &id, pt::ptime notify_time, std:
   return -1;
 }
 
-void notifies_t::remove_user_event_notifies (user_id &id, std::shared_ptr<event_t> notify_event)
+void notifies_t::remove_user_event_notifies (user_id &id, event_ptr notify_event)
 {
   for (auto i = all_notifies.begin (); i != all_notifies.end (); )
     {

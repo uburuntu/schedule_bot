@@ -10,7 +10,7 @@ int user_t::add_own_event (event_t new_own_event)
         return -1; // Event already exists
       if (new_own_event < **i)
         {
-          user_own_events.insert (i, std::unique_ptr<event_t> (new event_t (new_own_event)));
+          user_own_events.insert (i, event_ptr (new event_t (new_own_event)));
           return 0;
         }
     }
@@ -52,7 +52,7 @@ void user_t::remove_past_events (pt::ptime curr_time)
     }
 }
 
-std::shared_ptr<event_t> user_t::find_event (event_t event)
+event_ptr user_t::find_event (event_t event)
 {
   for (const auto &i : user_own_events)
     if (*i == event)

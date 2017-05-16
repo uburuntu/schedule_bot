@@ -7,9 +7,9 @@
 #include <map>
 
 #include "defaults.h"
+#include "event.h"
 #include "utils.h"
 
-class event_t;
 
 class user_t
 {
@@ -32,14 +32,14 @@ class user_t
     int add_own_event (event_t new_own_event);
     void remove_own_event (event_t own_event_to_remove);
     void remove_past_events (pt::ptime curr_time);
-    std::shared_ptr<event_t> find_event (event_t event);
+    event_ptr find_event (event_t event);
 
     std::vector<std::string> get_all_own_events_in_strings ();
 
   private:
     bool debug_mode = false;
     user_id id = 0;
-    std::vector<std::shared_ptr<event_t>> user_own_events;
+    std::vector<event_ptr> user_own_events;
 };
 
 class users_t

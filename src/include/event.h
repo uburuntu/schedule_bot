@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/gregorian/gregorian.hpp"
 
@@ -81,6 +82,8 @@ class event_t
     bool repeatable = false;
     pt::time_duration repeat_interval = pt::not_a_date_time;
 };
+
+typedef std::shared_ptr<event_t> event_ptr;
 
 #ifdef BOT_DEBUG_EDITION
   void event_test_function (); /// DEBUG FUNCTION
