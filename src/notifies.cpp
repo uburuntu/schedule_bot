@@ -113,13 +113,15 @@ int notify_t::set_repeating_interval (pt::time_duration repeating_interval_arg)
 int notifies_t::add_notify (notify_t new_notify)
 {
   auto new_notifying_event = new_notify.get_notifying_event ();
+  if (!new_notifying_event)
+    return -1;
   auto notifying_event_time = new_notifying_event->get_date_time ();
   bool event_is_repeatable = new_notifying_event->is_repeatable ();
   auto new_notify_time = new_notify.get_notify_time ();
 
   if ((new_notify_time > notifying_event_time && !event_is_repeatable) ||
       (event_is_repeatable && new_notify_time > notifying_event_time + new_notifying_event->get_repeat_interval ()))
-    return -1;
+    return -2;
 
   notify_t this_time_notifies_left_bound (new_notify.get_user_id (),
                                           new_notify_time - pt::minutes (1),
@@ -130,7 +132,7 @@ int notifies_t::add_notify (notify_t new_notify)
   while (*this_time_notifies_end < new_notify_time + pt::minutes (1))
     {
       if (*this_time_notifies_end == new_notify)
-        return -2; // This notify already exists in one minute bounds
+        return -3; // This notify already exists in one minute bounds
       this_time_notifies_end++;
     }
   all_notifies.insert (std::lower_bound (this_time_notifies_begin, this_time_notifies_end, new_notify), new_notify);
