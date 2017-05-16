@@ -4,7 +4,7 @@
 class schedule_t
 {
   public:
-    schedule_t();
+    schedule_t () {}
 };
 
 #endif // SCHEDULE_H

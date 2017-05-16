@@ -32,7 +32,7 @@ class notify_t
     const user_id &get_user_id () const {return id;}
     const pt::time_duration &get_repeating_interval () const {return repeating_interval;}
     const bool &is_repeatable () const {return repeatable;}
-    const std::shared_ptr <event_t> &get_notifying_event () const {return notify_event;}
+    const std::shared_ptr<event_t> &get_notifying_event () const {return notify_event;}
 
     // setters
     int set_repeating_interval (pt::time_duration repeating_interval_arg);
@@ -42,7 +42,7 @@ class notify_t
     pt::ptime notify_time = pt::not_a_date_time;
     bool repeatable = false;
     pt::time_duration repeating_interval = pt::not_a_date_time;
-    std::shared_ptr <event_t> notify_event;
+    std::shared_ptr<event_t> notify_event;
 };
 
 class notifies_t
@@ -50,25 +50,21 @@ class notifies_t
   public:
     SINGLETON_CLASS (notifies_t);
 
-    const std::vector <notify_t> &get_all_notifies () const {return all_notifies;}
+    const std::vector<notify_t> &get_all_notifies () const {return all_notifies;}
 
     int add_notify (notify_t new_notify);
-    int add_notify (user_id &id, pt::ptime notify_time, std::shared_ptr <event_t> notify_event);
+    int add_notify (user_id &id, pt::ptime notify_time, std::shared_ptr<event_t> notify_event);
     void clear_user_noifies (user_id &id);
-    int remove_user_one_notify (user_id &id, pt::ptime notify_time, std::shared_ptr <event_t> notify_event);
-    void remove_user_event_notifies (user_id &id, std::shared_ptr <event_t> notify_event);
+    int remove_user_one_notify (user_id &id, pt::ptime notify_time, std::shared_ptr<event_t> notify_event);
+    void remove_user_event_notifies (user_id &id, std::shared_ptr<event_t> notify_event);
     void remove_past_notifies (pt::ptime curr_time);
 
   private:
-    notifies_t ()
-    {
-
-    }
-
+    notifies_t () {}
     notifies_t (const notifies_t &) = delete;
     notifies_t operator= (const notifies_t &) = delete;
 
-    std::vector <notify_t> all_notifies;
+    std::vector<notify_t> all_notifies;
 };
 
 #endif // NOTIFIES_H

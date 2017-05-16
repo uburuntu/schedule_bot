@@ -9,7 +9,7 @@ typedef int64_t user_id;
 namespace sbot
 {
   static const std::string program = "Schedule Bot";
-  static const std::string version = "0.0.4";
+  static const std::string version = "0.1";
 
   static const std::string prefix_dir = "./sbot/";
   static const std::string build_date = __DATE__;

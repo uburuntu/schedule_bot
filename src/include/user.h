@@ -39,7 +39,7 @@ class user_t
   private:
     bool debug_mode = false;
     user_id id = 0;
-    std::vector <std::shared_ptr <event_t>> user_own_events;
+    std::vector<std::shared_ptr<event_t>> user_own_events;
 };
 
 class users_t

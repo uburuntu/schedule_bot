@@ -61,6 +61,5 @@ class report_system
 };
 
 using rep = report_system;
-using rep_ptr = std::shared_ptr<report_system>;
 
 #endif // REPORT_SYSTEM_H

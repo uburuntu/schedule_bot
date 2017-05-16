@@ -62,7 +62,7 @@ std::shared_ptr<event_t> user_t::find_event (event_t event)
 
 std::vector<std::string> user_t::get_all_own_events_in_strings ()
 {
-  std::vector <std::string> ret;
+  std::vector<std::string> ret;
   for (const auto &i : user_own_events)
     ret.push_back (i->event_to_string ());
   return ret;
