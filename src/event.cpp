@@ -177,9 +177,6 @@ void event_t::print_event () // That is temorary debug function
   printf ("Event name: %s\n", name.data ());
   printf ("Event date and time: %s\n", pt::to_iso_extended_string (event_date_time).data());
   printf ("Event place: %s\n", place.data ());
-  printf ("Notifies:\n");
-  for (auto i : notify_vector)
-    printf ("  Notify: %s\n", pt::to_iso_extended_string (i).data());
   print_type (etype);
   printf ("User note :\n  %s\n", user_note.data ());
   printf ("Default note :\n  %s\n", default_note.data ());
@@ -199,18 +196,11 @@ void event_test_function ()
 
 
   std::string tsn1 ("2001-01-20 23:59:59.000");
-  auto ptn_1 = pt::time_from_string (tsn1);
   std::string tsn2 ("2001-04-20 13:02:11.000");
-  auto ptn_2 = pt::time_from_string (tsn2);
   std::string tsn3 ("2001-03-20 20:59:59.000");
-  auto ptn_3 = pt::time_from_string (tsn3);
-  event_1.add_notify (ptn_2);
   event_1.print_event ();
-  event_1.add_notify (ptn_1);
   event_1.print_event ();
-  event_1.add_notify (ptn_3);
   event_1.print_event ();
-  event_1.remove_notify (ptn_3);
 
   event_1.add_user_note (tsn1);
   event_1.add_user_note (tsn2);
@@ -221,7 +211,6 @@ void event_test_function ()
   event_2.set_place (plc);
   event_2.print_event ();
 
-  event_1.clear_notify ();
   event_1.print_event ();
 }
 #endif
