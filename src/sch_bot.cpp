@@ -77,9 +77,9 @@ void sch_bot::init_commands ()
   auto any_message_handle = [this] (TgBot::Message::Ptr message_in)
   {
     rep.print (rep::message_in, "User (name = %s, id = %ld) wrote '%s'",
-                                 message_in->chat->username.c_str (),
-                                 message_in->chat->id,
-                                 message_in->text.c_str());
+               message_in->chat->username.c_str (),
+               message_in->chat->id,
+               message_in->text.c_str());
 
     if (StringTools::startsWith (message_in->text, "/"))
       return;
@@ -150,7 +150,7 @@ void sch_bot::notify_all ()
       notify_user (notify_it);
     }
 
-  for (auto &i: users.get_all_users ())
+  for (auto &i : users.get_all_users ())
     {
       user_t &user = std::get<1> (i);
       user.remove_past_events (time);

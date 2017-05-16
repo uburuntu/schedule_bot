@@ -25,7 +25,7 @@ class notify_t
 
     int switch_repeatability ();
     void repeat_notify () {if (repeatable) notify_time += repeating_interval;}
-    int make_repeatable(pt::time_duration repeating_interval_arg);
+    int make_repeatable (pt::time_duration repeating_interval_arg);
 
     // getters
     const pt::ptime &get_notify_time () const {return notify_time;}
@@ -35,7 +35,7 @@ class notify_t
     const std::shared_ptr <event_t> &get_notifying_event () const {return notify_event;}
 
     // setters
-    int set_repeating_interval(pt::time_duration repeating_interval_arg);
+    int set_repeating_interval (pt::time_duration repeating_interval_arg);
 
   private:
     user_id id = 0;
@@ -56,7 +56,7 @@ class notifies_t
     int add_notify (user_id &id, pt::ptime notify_time, std::shared_ptr <event_t> notify_event);
     void clear_user_noifies (user_id &id);
     int remove_user_one_notify (user_id &id, pt::ptime notify_time, std::shared_ptr <event_t> notify_event);
-    void remove_user_event_notifies(user_id &id, std::shared_ptr <event_t> notify_event);
+    void remove_user_event_notifies (user_id &id, std::shared_ptr <event_t> notify_event);
     void remove_past_notifies (pt::ptime curr_time);
 
   private:

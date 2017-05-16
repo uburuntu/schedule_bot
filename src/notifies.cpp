@@ -30,7 +30,7 @@ bool notify_t::operator== (const notify_t &rhs) const
   bool equal_id = id == rhs.id;
   if (!equal_id)
     return false;
-  bool equal_event = *notify_event == *(rhs.notify_event);
+  bool equal_event = *notify_event == *rhs.notify_event;
   if (!equal_event)
     return false;
 
