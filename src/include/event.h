@@ -29,12 +29,9 @@ class event_t
     ~event_t ();
     event_t (const event_t &rhs);
     event_t &operator= (const event_t &rhs);
-    bool operator== (const event_t &rhs);
-    bool operator< (const event_t &rhs);
-    bool operator> (const event_t &rhs);
-
-    bool operator< (const pt::ptime &rhs);
-    bool operator> (const pt::ptime &rhs);
+    bool operator== (const event_t &rhs) const;
+    bool operator< (const event_t &rhs) const;
+    bool operator> (const event_t &rhs) const;
 
     // getters
     const boost::gregorian::date get_date () const {return event_date_time.date ();}
@@ -68,7 +65,7 @@ class event_t
     static const char *enum_to_string (const event_type &type);
     std::string event_to_string ();
 
-    bool is_empty(); // maybe not neccecary
+    bool is_empty () const; // maybe not neccecary
 
     #ifdef BOT_DEBUG_EDITION
     void print_event (); /// THAT IS TEMPORARY DEBUG FUNCTION

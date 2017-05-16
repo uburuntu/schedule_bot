@@ -152,9 +152,7 @@ void sch_bot::notify_all ()
 
   for (auto &i: users.get_all_users ())
     {
-      user_id id;
-      user_t user;
-      std::tie (id, user) = i;
+      user_t &user = std::get<1> (i);
       user.remove_past_events (time);
     }
 

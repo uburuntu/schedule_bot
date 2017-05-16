@@ -35,19 +35,19 @@ event_t &event_t::operator= (const event_t &rhs)
   return *this;
 }
 
-bool event_t::operator== (const event_t &rhs)
+bool event_t::operator== (const event_t &rhs) const
 {
   return name == rhs.name &&
          event_date_time == rhs.event_date_time &&
          etype == rhs.etype;
 }
 
-bool event_t::operator< (const event_t &rhs)
+bool event_t::operator< (const event_t &rhs) const
 {
   return event_date_time < rhs.event_date_time;
 }
 
-bool event_t::operator> (const event_t &rhs)
+bool event_t::operator> (const event_t &rhs) const
 {
   return event_date_time > rhs.event_date_time;
 }
@@ -155,7 +155,7 @@ int event_t::switch_repeatability ()
   return 0;
 }
 
-bool event_t::is_empty () // maybe not neccecary
+bool event_t::is_empty () const // maybe not neccecary
 {
   return event_date_time == pt::not_a_date_time
          && place.empty ()
@@ -175,11 +175,11 @@ void event_t::print_event () // That is temorary debug function
 {
   printf ("\n===================================\n");
   printf ("Event name: %s\n", name.data ());
-  printf ("Event date and time: %s\n", boost::posix_time::to_iso_extended_string (event_date_time).data());
+  printf ("Event date and time: %s\n", pt::to_iso_extended_string (event_date_time).data());
   printf ("Event place: %s\n", place.data ());
   printf ("Notifies:\n");
   for (auto i : notify_vector)
-    printf ("  Notify: %s\n", boost::posix_time::to_iso_extended_string (i).data());
+    printf ("  Notify: %s\n", pt::to_iso_extended_string (i).data());
   print_type (etype);
   printf ("User note :\n  %s\n", user_note.data ());
   printf ("Default note :\n  %s\n", default_note.data ());
@@ -191,19 +191,19 @@ void event_test_function ()
   std::string ts ("2002-01-20 23:59:59.000");
   std::string name_1 ("event_name_1");
   std::string name_2 ("event_name_2");
-  auto pt_1 = boost::posix_time::time_from_string (ts);
-  boost::posix_time::ptime pt_2 (boost::gregorian::date (2010, boost::gregorian::Apr, 10),
-                                 boost::posix_time::hours (14) + boost::posix_time::minutes (15));
+  auto pt_1 = pt::time_from_string (ts);
+  pt::ptime pt_2 (boost::gregorian::date (2010, boost::gregorian::Apr, 10),
+                                 pt::hours (14) + pt::minutes (15));
   event_t event_1 (pt_1, name_1, event_t::lecture);
   event_t event_2 (pt_2, name_2, event_t::seminar);
 
 
   std::string tsn1 ("2001-01-20 23:59:59.000");
-  auto ptn_1 = boost::posix_time::time_from_string (tsn1);
+  auto ptn_1 = pt::time_from_string (tsn1);
   std::string tsn2 ("2001-04-20 13:02:11.000");
-  auto ptn_2 = boost::posix_time::time_from_string (tsn2);
+  auto ptn_2 = pt::time_from_string (tsn2);
   std::string tsn3 ("2001-03-20 20:59:59.000");
-  auto ptn_3 = boost::posix_time::time_from_string (tsn3);
+  auto ptn_3 = pt::time_from_string (tsn3);
   event_1.add_notify (ptn_2);
   event_1.print_event ();
   event_1.add_notify (ptn_1);

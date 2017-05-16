@@ -8,7 +8,7 @@
 class notify_t
 {
   public:
-    notify_t (const user_id id_arg, pt::ptime notify_time_arg, std::shared_ptr <event_t> notify_event_arg);
+    notify_t (const user_id id_arg, pt::ptime notify_time_arg, std::shared_ptr<event_t> notify_event_arg);
     notify_t (const notify_t &rhs);
     notify_t &operator= (const notify_t &rhs);
 
