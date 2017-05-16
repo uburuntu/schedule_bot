@@ -20,6 +20,8 @@ namespace sbot
   static const size_t max_message_length = 4096;
   static const size_t buf_size = 3 * max_message_length;
 
+  static const int max_exceptions_get = 10;
+
   static const user_id r_id = 28006241;
   static const user_id a_id = 3191519;
   static const user_id v_id = 173546332;

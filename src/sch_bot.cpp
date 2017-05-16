@@ -105,8 +105,6 @@ void sch_bot::init_users ()
   users.add_admin (sbot::a_id);
   users.add_admin (sbot::v_id);
 
-  send_message_admins ("Bot started, current version: " + sbot::version + ".\nBuild time: " + sbot::build_date + " " + sbot::build_time);
-
   // TODO: implement users import / export
 }
 

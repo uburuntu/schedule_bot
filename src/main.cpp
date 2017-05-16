@@ -53,6 +53,7 @@ int main (int /* argc */, char *argv[])
           TgBot::TgLongPoll long_poll (bot);
 
           rep.print (rep::info, "Long poll started");
+          bot.send_message_admins ("Bot started, current version: " + sbot::version + ".\nBuild time: " + sbot::build_date + " " + sbot::build_time);
           while (1)
             {
               long_poll.start ();
@@ -65,6 +66,10 @@ int main (int /* argc */, char *argv[])
       catch (std::exception &e)
         {
           rep.print (rep::error, "Exception: %s", e.what ());
+
+          static int count_exceptions = 0;
+          if (count_exceptions++ >= sbot::max_exceptions_get)
+            throw e;
         }
     }
 
