@@ -124,7 +124,7 @@ void sch_bot::send_message (const TgBot::Message::Ptr message, const std::string
 
 void sch_bot::send_message_all (const std::string &text)
 {
-  for (auto &user_it : users.get_all_users ())
+  for (const auto &user_it : users.get_all_users ())
     {
       user_id id = user_it.second.get_id ();
       send_message (id, "[Global Message]" + sbot::empty_line + text);
@@ -133,7 +133,7 @@ void sch_bot::send_message_all (const std::string &text)
 
 void sch_bot::send_message_admins (const std::string &text)
 {
-  for (auto &user_it : users.get_admins ())
+  for (const auto &user_it : users.get_admins ())
     {
       user_id id = user_it;
       send_message (id, "[Admin Report]" + sbot::empty_line + text);
@@ -143,7 +143,7 @@ void sch_bot::send_message_admins (const std::string &text)
 void sch_bot::notify_all ()
 {
   pt::ptime time = sbot::curr_time ();
-  for (auto &notify_it : notifies.get_all_notifies ())
+  for (const auto &notify_it : notifies.get_all_notifies ())
     {
       if (notify_it > time)
         break;
