@@ -23,7 +23,7 @@ set(SOURCES_LIST src/main.cpp
                  src/notifies.cpp)
 
 # Headers directories list
-set(HEADERS_DIRS_LIST ./src/include ./config)
+set(HEADERS_DIRS_LIST ./src ./src/include ./config)
 
 add_executable(${EXECUTABLE} ${SOURCES_LIST})
 include_directories(${HEADERS_DIRS_LIST} /usr/local/include ${OPENSSL_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
