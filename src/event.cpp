@@ -173,7 +173,7 @@ inline void print_type (event_t::event_type type)
 
 void event_t::print_event () // That is temorary debug function
 {
-  printf ("\n===================================\n");
+  printf ("\n=================================\n");
   printf ("Event name: %s\n", name.data ());
   printf ("Event date and time: %s\n", pt::to_iso_extended_string (event_date_time).data());
   printf ("Event place: %s\n", place.data ());
